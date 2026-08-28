@@ -1,7 +1,0 @@
-# Optional [live] extra — pull telemetry live from Splunk instead of the
-# offline snapshot. NOT needed to run PANDA: without it, `tdr` (and `tdr live`)
-# read the bundled snapshot fixture.
-# Install with:  pip install -r requirements-live.txt
-# Also set SPLUNK_HOST / SPLUNK_PORT / SPLUNK_USER / SPLUNK_PASSWORD (and
-# SPLUNK_VERIFY) in the environment / .env, with Splunk reachable, to pull live.
-splunk-sdk

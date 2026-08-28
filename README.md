@@ -17,8 +17,8 @@ bundled offline snapshot.
 ## Quickstart
 
 ```bash
-pip install -r requirements.txt
-python main.py
+pip install -e .
+panda          # or: python main.py
 ```
 
 No configuration required. On first run PANDA creates an encrypted vault at
@@ -89,9 +89,9 @@ weaken the core — each degrades to the deterministic path when absent.
 
 | Install | Adds | Needs |
 | --- | --- | --- |
-| `requirements.txt` (core) | vault + full deterministic TDR engine, offline | — |
-| `requirements-ai.txt` (`[ai]`) | LLM-polished report **wording** | `crewai` + `GEMINI_API_KEY` |
-| `requirements-live.txt` (`[live]`) | live Splunk pull instead of the snapshot | `splunk-sdk` + `SPLUNK_*`, Splunk reachable |
+| `pip install -e .` (core) | vault + full deterministic TDR engine, offline | — |
+| `pip install -e '.[ai]'` | LLM-polished report **wording** | `crewai` + `GEMINI_API_KEY` |
+| `pip install -e '.[live]'` | live Splunk pull instead of the snapshot | `splunk-sdk` + `SPLUNK_*`, Splunk reachable |
 
 **The deterministic report is always the source of truth.** LLM polish only
 rewords it, behind two integrity guards: a whole-card guard (rejects LaTeX, a
@@ -105,8 +105,8 @@ failure.
 
 ```bash
 # optional, any combination:
-pip install -r requirements-ai.txt      # + set GEMINI_API_KEY
-pip install -r requirements-live.txt    # + set SPLUNK_USER / SPLUNK_PASSWORD / ...
+pip install -e '.[ai]'      # + set GEMINI_API_KEY
+pip install -e '.[live]'    # + set SPLUNK_USER / SPLUNK_PASSWORD / ...
 ```
 
 ## Security design
@@ -132,9 +132,7 @@ PANDA/
 ├── main.py                # CLI: banner, command loop, security + tdr/cases commands
 ├── config.py              # local config (vault path); no keys/secrets
 ├── schema.sql             # cases / detections / reports (FK-enforced)
-├── requirements.txt       # core (offline)
-├── requirements-ai.txt    # [ai] extra   — crewai + Gemini
-├── requirements-live.txt  # [live] extra — splunk-sdk
+├── pyproject.toml         # package + deps: core, and [ai] / [live] / [dev] extras
 ├── DECISIONS.md           # decision record
 ├── panda/                 # the platform
 │   ├── auth.py  crypto.py  db.py      # bcrypt auth, encryption, in-memory DAO
@@ -156,7 +154,7 @@ PANDA/
 ## Tests
 
 ```bash
-pip install -r requirements-dev.txt
+pip install -e '.[dev]'
 pytest
 ```
 

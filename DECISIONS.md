@@ -202,15 +202,30 @@ unchanged — only the source swaps.
   (with the client's capped-exponential backoff) and shares it across all
   four pulls.
 
-## Deferred packaging upgrade
+## Packaging — `pyproject.toml`
 
-Optional deps are separate flat files today (`requirements-ai.txt`,
-`requirements-dev.txt`; `requirements-live.txt` arrives with `[live]`) —
-matching the repo's existing convention, zero packaging overhead. **Later
-(docs/reveal cut):** convert to a `pyproject.toml` with real
-`[project.optional-dependencies]` so `pip install .[ai]` / `.[live]` works
-— cleaner and more professional for a public repo. Noted here so it isn't
-forgotten.
+Dependencies live in a single `pyproject.toml` (setuptools backend), the
+one source of truth — the earlier flat `requirements*.txt` files were
+removed. Core deps are `[project].dependencies`; the opt-in extras are real
+`[project.optional-dependencies]`, so the offline/opt-in split is expressed
+in the packaging itself:
+
+```
+pip install -e .            # core (offline)
+pip install -e '.[ai]'      # + crewai (LLM polish)
+pip install -e '.[live]'    # + splunk-sdk (live pull)
+pip install -e '.[dev]'     # + pytest
+```
+
+- **Editable (`-e`) is the supported install.** PANDA runs from the source
+  tree (`schema.sql` is read by path relative to `panda/db.py`), so an
+  editable install keeps that working while resolving the extras; a console
+  script (`panda = main:main`) gives a clean entry point. A non-editable
+  install would need `schema.sql` packaged as data — deferred until there's
+  a reason to ship a wheel.
+- Flat layout is declared explicitly (`packages`, `py-modules`) rather than
+  auto-discovered, because the root carries `main.py` / `config.py` as
+  modules alongside the `panda` / `panda_tdr` packages.
 
 ## Architecture / the TDR extension seam
 

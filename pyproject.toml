@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "panda-tdr"
+version = "0.1.0"
+description = "Local-first encrypted security vault with an integrated threat-detection engine."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "tabulate",
+    "python-dotenv",
+    "bcrypt",
+    "cryptography",
+    "pandas",
+    "scikit-learn",
+]
+
+# Opt-in extras — strictly optional; the core runs fully offline without them.
+# Each extra's dependency is imported lazily, so a core install never loads it.
+[project.optional-dependencies]
+ai = ["crewai"]         # LLM-polished reports; also set GEMINI_API_KEY
+live = ["splunk-sdk"]   # live Splunk pull; also set SPLUNK_* with Splunk reachable
+dev = ["pytest"]        # test suite
+
+[project.scripts]
+panda = "main:main"
+
+[tool.setuptools]
+packages = ["panda", "panda_tdr", "panda_tdr.crews"]
+py-modules = ["config", "main"]
