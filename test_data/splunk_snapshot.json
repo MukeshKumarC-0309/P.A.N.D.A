@@ -1,0 +1,2744 @@
+{
+  "cowrie": [
+    {
+      "_time": "2026-08-04T17:52:53.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "ec627e9582ca",
+      "src_ip": "10.0.2.3",
+      "src_port": "54734",
+      "message": "Connection lost after 15501 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T17:52:53.000+00:00",
+      "eventid": "cowrie.log.closed",
+      "session": "ec627e9582ca",
+      "src_ip": "10.0.2.3",
+      "src_port": "54734",
+      "message": "Closing TTY Log: var/lib/cowrie/tty/938ee6aa7ea7094e1010d4d951485c26c80b499862245b84e8c896cda61f840d after 6282 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T17:52:53.000+00:00",
+      "eventid": "cowrie.command.input",
+      "session": "ec627e9582ca",
+      "src_ip": "10.0.2.3",
+      "src_port": "54734",
+      "message": "CMD: exit"
+    },
+    {
+      "_time": "2026-08-04T17:52:46.000+00:00",
+      "eventid": "cowrie.session.params",
+      "session": "ec627e9582ca",
+      "src_ip": "10.0.2.3",
+      "src_port": "54734",
+      "message": ""
+    },
+    {
+      "_time": "2026-08-04T17:52:46.000+00:00",
+      "eventid": "cowrie.client.size",
+      "session": "ec627e9582ca",
+      "src_ip": "10.0.2.3",
+      "src_port": "54734",
+      "message": "Terminal Size: 120 30"
+    },
+    {
+      "_time": "2026-08-04T17:52:46.000+00:00",
+      "eventid": "cowrie.login.success",
+      "session": "ec627e9582ca",
+      "src_ip": "10.0.2.3",
+      "src_port": "54734",
+      "username": "admin",
+      "password": "root",
+      "message": "login attempt [admin/root] succeeded"
+    },
+    {
+      "_time": "2026-08-04T17:52:40.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "ec627e9582ca",
+      "src_ip": "10.0.2.3",
+      "src_port": "54734",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T17:52:40.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "ec627e9582ca",
+      "src_ip": "10.0.2.3",
+      "src_port": "54734",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T17:52:38.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "ec627e9582ca",
+      "src_ip": "10.0.2.3",
+      "src_port": "54734",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-08-04T17:52:38.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "ec627e9582ca",
+      "src_ip": "10.0.2.3",
+      "src_port": "54734",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-08-04T17:52:38.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "ec627e9582ca",
+      "src_ip": "10.0.2.3",
+      "src_port": "54734",
+      "message": "New connection: 10.0.2.3:54734 (10.0.2.15:2222) [session: ec627e9582ca]"
+    },
+    {
+      "_time": "2026-08-04T17:51:53.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "8514581a05d7",
+      "src_ip": "10.0.2.3",
+      "src_port": "54725",
+      "message": "Connection lost after 10957 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T17:51:53.000+00:00",
+      "eventid": "cowrie.log.closed",
+      "session": "8514581a05d7",
+      "src_ip": "10.0.2.3",
+      "src_port": "54725",
+      "message": "Closing TTY Log: var/lib/cowrie/tty/2638f1c1c2018567a46a4cae049dd90db2d468e1538d60d328f2707d071f73c5 after 1649 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T17:51:53.000+00:00",
+      "eventid": "cowrie.command.input",
+      "session": "8514581a05d7",
+      "src_ip": "10.0.2.3",
+      "src_port": "54725",
+      "message": "CMD: exit"
+    },
+    {
+      "_time": "2026-08-04T17:51:51.000+00:00",
+      "eventid": "cowrie.session.params",
+      "session": "8514581a05d7",
+      "src_ip": "10.0.2.3",
+      "src_port": "54725",
+      "message": ""
+    },
+    {
+      "_time": "2026-08-04T17:51:51.000+00:00",
+      "eventid": "cowrie.client.size",
+      "session": "8514581a05d7",
+      "src_ip": "10.0.2.3",
+      "src_port": "54725",
+      "message": "Terminal Size: 120 30"
+    },
+    {
+      "_time": "2026-08-04T17:51:51.000+00:00",
+      "eventid": "cowrie.login.success",
+      "session": "8514581a05d7",
+      "src_ip": "10.0.2.3",
+      "src_port": "54725",
+      "username": "admin",
+      "password": "root",
+      "message": "login attempt [admin/root] succeeded"
+    },
+    {
+      "_time": "2026-08-04T17:51:45.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "8514581a05d7",
+      "src_ip": "10.0.2.3",
+      "src_port": "54725",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T17:51:45.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "8514581a05d7",
+      "src_ip": "10.0.2.3",
+      "src_port": "54725",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T17:51:42.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "8514581a05d7",
+      "src_ip": "10.0.2.3",
+      "src_port": "54725",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-08-04T17:51:42.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "8514581a05d7",
+      "src_ip": "10.0.2.3",
+      "src_port": "54725",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-08-04T17:51:42.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "8514581a05d7",
+      "src_ip": "10.0.2.3",
+      "src_port": "54725",
+      "message": "New connection: 10.0.2.3:54725 (10.0.2.15:2222) [session: 8514581a05d7]"
+    },
+    {
+      "_time": "2026-08-04T17:27:47.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "b8982b1b511c",
+      "src_ip": "10.0.2.3",
+      "src_port": "49914",
+      "message": "Connection lost after 188522 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T17:27:47.000+00:00",
+      "eventid": "cowrie.log.closed",
+      "session": "b8982b1b511c",
+      "src_ip": "10.0.2.3",
+      "src_port": "49914",
+      "message": "Closing TTY Log: var/lib/cowrie/tty/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 after 180012 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T17:24:47.000+00:00",
+      "eventid": "cowrie.session.params",
+      "session": "b8982b1b511c",
+      "src_ip": "10.0.2.3",
+      "src_port": "49914",
+      "message": ""
+    },
+    {
+      "_time": "2026-08-04T17:24:47.000+00:00",
+      "eventid": "cowrie.client.size",
+      "session": "b8982b1b511c",
+      "src_ip": "10.0.2.3",
+      "src_port": "49914",
+      "message": "Terminal Size: 120 30"
+    },
+    {
+      "_time": "2026-08-04T17:24:47.000+00:00",
+      "eventid": "cowrie.login.success",
+      "session": "b8982b1b511c",
+      "src_ip": "10.0.2.3",
+      "src_port": "49914",
+      "username": "admin",
+      "password": "root",
+      "message": "login attempt [admin/root] succeeded"
+    },
+    {
+      "_time": "2026-08-04T17:24:44.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "b8982b1b511c",
+      "src_ip": "10.0.2.3",
+      "src_port": "49914",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T17:24:41.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "b8982b1b511c",
+      "src_ip": "10.0.2.3",
+      "src_port": "49914",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T17:24:39.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "b8982b1b511c",
+      "src_ip": "10.0.2.3",
+      "src_port": "49914",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-08-04T17:24:39.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "b8982b1b511c",
+      "src_ip": "10.0.2.3",
+      "src_port": "49914",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-08-04T17:24:39.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "b8982b1b511c",
+      "src_ip": "10.0.2.3",
+      "src_port": "49914",
+      "message": "New connection: 10.0.2.3:49914 (10.0.2.15:2222) [session: b8982b1b511c]"
+    },
+    {
+      "_time": "2026-08-04T17:20:24.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "b7a9f3a21d43",
+      "src_ip": "10.0.2.3",
+      "src_port": "49832",
+      "message": "Connection lost after 9596 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T17:20:24.000+00:00",
+      "eventid": "cowrie.log.closed",
+      "session": "b7a9f3a21d43",
+      "src_ip": "10.0.2.3",
+      "src_port": "49832",
+      "message": "Closing TTY Log: var/lib/cowrie/tty/2638f1c1c2018567a46a4cae049dd90db2d468e1538d60d328f2707d071f73c5 after 1840 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T17:20:24.000+00:00",
+      "eventid": "cowrie.command.input",
+      "session": "b7a9f3a21d43",
+      "src_ip": "10.0.2.3",
+      "src_port": "49832",
+      "message": "CMD: exit"
+    },
+    {
+      "_time": "2026-08-04T17:20:23.000+00:00",
+      "eventid": "cowrie.session.params",
+      "session": "b7a9f3a21d43",
+      "src_ip": "10.0.2.3",
+      "src_port": "49832",
+      "message": ""
+    },
+    {
+      "_time": "2026-08-04T17:20:23.000+00:00",
+      "eventid": "cowrie.client.size",
+      "session": "b7a9f3a21d43",
+      "src_ip": "10.0.2.3",
+      "src_port": "49832",
+      "message": "Terminal Size: 120 30"
+    },
+    {
+      "_time": "2026-08-04T17:20:23.000+00:00",
+      "eventid": "cowrie.login.success",
+      "session": "b7a9f3a21d43",
+      "src_ip": "10.0.2.3",
+      "src_port": "49832",
+      "username": "admin",
+      "password": "root",
+      "message": "login attempt [admin/root] succeeded"
+    },
+    {
+      "_time": "2026-08-04T17:20:20.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "b7a9f3a21d43",
+      "src_ip": "10.0.2.3",
+      "src_port": "49832",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T17:20:17.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "b7a9f3a21d43",
+      "src_ip": "10.0.2.3",
+      "src_port": "49832",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T17:20:15.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "b7a9f3a21d43",
+      "src_ip": "10.0.2.3",
+      "src_port": "49832",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-08-04T17:20:15.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "b7a9f3a21d43",
+      "src_ip": "10.0.2.3",
+      "src_port": "49832",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-08-04T17:20:15.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "b7a9f3a21d43",
+      "src_ip": "10.0.2.3",
+      "src_port": "49832",
+      "message": "New connection: 10.0.2.3:49832 (10.0.2.15:2222) [session: b7a9f3a21d43]"
+    },
+    {
+      "_time": "2026-08-04T17:14:45.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "03161167e631",
+      "src_ip": "10.0.2.3",
+      "src_port": "49764",
+      "message": "Connection lost after 12723 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T17:14:45.000+00:00",
+      "eventid": "cowrie.log.closed",
+      "session": "03161167e631",
+      "src_ip": "10.0.2.3",
+      "src_port": "49764",
+      "message": "Closing TTY Log: var/lib/cowrie/tty/2638f1c1c2018567a46a4cae049dd90db2d468e1538d60d328f2707d071f73c5 after 2632 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T17:14:45.000+00:00",
+      "eventid": "cowrie.command.input",
+      "session": "03161167e631",
+      "src_ip": "10.0.2.3",
+      "src_port": "49764",
+      "message": "CMD: exit"
+    },
+    {
+      "_time": "2026-08-04T17:14:42.000+00:00",
+      "eventid": "cowrie.session.params",
+      "session": "03161167e631",
+      "src_ip": "10.0.2.3",
+      "src_port": "49764",
+      "message": ""
+    },
+    {
+      "_time": "2026-08-04T17:14:42.000+00:00",
+      "eventid": "cowrie.client.size",
+      "session": "03161167e631",
+      "src_ip": "10.0.2.3",
+      "src_port": "49764",
+      "message": "Terminal Size: 120 30"
+    },
+    {
+      "_time": "2026-08-04T17:14:42.000+00:00",
+      "eventid": "cowrie.login.success",
+      "session": "03161167e631",
+      "src_ip": "10.0.2.3",
+      "src_port": "49764",
+      "username": "admin",
+      "password": "root",
+      "message": "login attempt [admin/root] succeeded"
+    },
+    {
+      "_time": "2026-08-04T17:14:38.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "03161167e631",
+      "src_ip": "10.0.2.3",
+      "src_port": "49764",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T17:14:35.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "03161167e631",
+      "src_ip": "10.0.2.3",
+      "src_port": "49764",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T17:14:32.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "03161167e631",
+      "src_ip": "10.0.2.3",
+      "src_port": "49764",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-08-04T17:14:32.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "03161167e631",
+      "src_ip": "10.0.2.3",
+      "src_port": "49764",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-08-04T17:14:32.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "03161167e631",
+      "src_ip": "10.0.2.3",
+      "src_port": "49764",
+      "message": "New connection: 10.0.2.3:49764 (10.0.2.15:2222) [session: 03161167e631]"
+    },
+    {
+      "_time": "2026-08-04T18:03:09.000+00:00",
+      "eventid": "cowrie.log.closed",
+      "session": "05acff445a4f",
+      "src_ip": "10.0.2.3",
+      "src_port": "54800",
+      "message": "Closing TTY Log: var/lib/cowrie/tty/2638f1c1c2018567a46a4cae049dd90db2d468e1538d60d328f2707d071f73c5 after 1694 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T18:03:09.000+00:00",
+      "eventid": "cowrie.command.input",
+      "session": "05acff445a4f",
+      "src_ip": "10.0.2.3",
+      "src_port": "54800",
+      "message": "CMD: exit"
+    },
+    {
+      "_time": "2026-08-04T18:03:07.000+00:00",
+      "eventid": "cowrie.session.params",
+      "session": "05acff445a4f",
+      "src_ip": "10.0.2.3",
+      "src_port": "54800",
+      "message": ""
+    },
+    {
+      "_time": "2026-08-04T18:03:07.000+00:00",
+      "eventid": "cowrie.client.size",
+      "session": "05acff445a4f",
+      "src_ip": "10.0.2.3",
+      "src_port": "54800",
+      "message": "Terminal Size: 125 44"
+    },
+    {
+      "_time": "2026-08-04T18:03:07.000+00:00",
+      "eventid": "cowrie.login.success",
+      "session": "05acff445a4f",
+      "src_ip": "10.0.2.3",
+      "src_port": "54800",
+      "username": "admin",
+      "password": "root",
+      "message": "login attempt [admin/root] succeeded"
+    },
+    {
+      "_time": "2026-08-04T18:03:04.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "05acff445a4f",
+      "src_ip": "10.0.2.3",
+      "src_port": "54800",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T18:03:01.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "05acff445a4f",
+      "src_ip": "10.0.2.3",
+      "src_port": "54800",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T18:03:01.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "05acff445a4f",
+      "src_ip": "10.0.2.3",
+      "src_port": "54800",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-08-04T18:03:01.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "05acff445a4f",
+      "src_ip": "10.0.2.3",
+      "src_port": "54800",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-08-04T18:03:01.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "05acff445a4f",
+      "src_ip": "10.0.2.3",
+      "src_port": "54800",
+      "message": "New connection: 10.0.2.3:54800 (10.0.2.15:2222) [session: 05acff445a4f]"
+    },
+    {
+      "_time": "2026-08-04T18:02:58.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "5d8d4639b2e4",
+      "src_ip": "10.0.2.3",
+      "src_port": "54796",
+      "message": "Connection lost after 8806 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T18:02:58.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "5d8d4639b2e4",
+      "src_ip": "10.0.2.3",
+      "src_port": "54796",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T18:02:54.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "5d8d4639b2e4",
+      "src_ip": "10.0.2.3",
+      "src_port": "54796",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T18:02:51.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "5d8d4639b2e4",
+      "src_ip": "10.0.2.3",
+      "src_port": "54796",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T18:02:49.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "5d8d4639b2e4",
+      "src_ip": "10.0.2.3",
+      "src_port": "54796",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-08-04T18:02:49.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "5d8d4639b2e4",
+      "src_ip": "10.0.2.3",
+      "src_port": "54796",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-08-04T18:02:49.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "5d8d4639b2e4",
+      "src_ip": "10.0.2.3",
+      "src_port": "54796",
+      "message": "New connection: 10.0.2.3:54796 (10.0.2.15:2222) [session: 5d8d4639b2e4]"
+    },
+    {
+      "_time": "2026-08-04T18:03:09.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "05acff445a4f",
+      "src_ip": "10.0.2.3",
+      "src_port": "54800",
+      "message": "Connection lost after 8945 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T11:56:25.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "c33891ea8e3b",
+      "src_ip": "10.0.2.3",
+      "src_port": "50664",
+      "message": "Connection lost after 51257 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T11:56:25.000+00:00",
+      "eventid": "cowrie.log.closed",
+      "session": "c33891ea8e3b",
+      "src_ip": "10.0.2.3",
+      "src_port": "50664",
+      "message": "Closing TTY Log: var/lib/cowrie/tty/2638f1c1c2018567a46a4cae049dd90db2d468e1538d60d328f2707d071f73c5 after 49283 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T11:56:25.000+00:00",
+      "eventid": "cowrie.command.input",
+      "session": "c33891ea8e3b",
+      "src_ip": "10.0.2.3",
+      "src_port": "50664",
+      "message": "CMD: exit"
+    },
+    {
+      "_time": "2026-08-04T11:55:36.000+00:00",
+      "eventid": "cowrie.session.params",
+      "session": "c33891ea8e3b",
+      "src_ip": "10.0.2.3",
+      "src_port": "50664",
+      "message": ""
+    },
+    {
+      "_time": "2026-08-04T11:55:36.000+00:00",
+      "eventid": "cowrie.client.size",
+      "session": "c33891ea8e3b",
+      "src_ip": "10.0.2.3",
+      "src_port": "50664",
+      "message": "Terminal Size: 120 30"
+    },
+    {
+      "_time": "2026-08-04T11:55:36.000+00:00",
+      "eventid": "cowrie.login.success",
+      "session": "c33891ea8e3b",
+      "src_ip": "10.0.2.3",
+      "src_port": "50664",
+      "username": "admin",
+      "password": "root",
+      "message": "login attempt [admin/root] succeeded"
+    },
+    {
+      "_time": "2026-08-04T11:55:34.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "c33891ea8e3b",
+      "src_ip": "10.0.2.3",
+      "src_port": "50664",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-08-04T11:55:34.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "c33891ea8e3b",
+      "src_ip": "10.0.2.3",
+      "src_port": "50664",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-08-04T11:55:34.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "c33891ea8e3b",
+      "src_ip": "10.0.2.3",
+      "src_port": "50664",
+      "message": "New connection: 10.0.2.3:50664 (10.0.2.15:2222) [session: c33891ea8e3b]"
+    },
+    {
+      "_time": "2026-08-04T11:55:34.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "f3ab61363acf",
+      "src_ip": "10.0.2.3",
+      "src_port": "50655",
+      "message": "Connection lost after 11052 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T11:55:31.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "f3ab61363acf",
+      "src_ip": "10.0.2.3",
+      "src_port": "50655",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T11:55:28.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "f3ab61363acf",
+      "src_ip": "10.0.2.3",
+      "src_port": "50655",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T11:55:24.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "f3ab61363acf",
+      "src_ip": "10.0.2.3",
+      "src_port": "50655",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T11:55:21.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "f3ab61363acf",
+      "src_ip": "10.0.2.3",
+      "src_port": "50655",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-08-04T11:55:21.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "f3ab61363acf",
+      "src_ip": "10.0.2.3",
+      "src_port": "50655",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-08-04T11:55:21.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "f3ab61363acf",
+      "src_ip": "10.0.2.3",
+      "src_port": "50655",
+      "message": "New connection: 10.0.2.3:50655 (10.0.2.15:2222) [session: f3ab61363acf]"
+    },
+    {
+      "_time": "2026-08-04T11:34:51.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "44d3ce58bdb1",
+      "src_ip": "10.0.2.3",
+      "src_port": "49831",
+      "message": "Connection lost after 78947 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T11:34:51.000+00:00",
+      "eventid": "cowrie.log.closed",
+      "session": "44d3ce58bdb1",
+      "src_ip": "10.0.2.3",
+      "src_port": "49831",
+      "message": "Closing TTY Log: var/lib/cowrie/tty/2638f1c1c2018567a46a4cae049dd90db2d468e1538d60d328f2707d071f73c5 after 55531 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T11:34:51.000+00:00",
+      "eventid": "cowrie.command.input",
+      "session": "44d3ce58bdb1",
+      "src_ip": "10.0.2.3",
+      "src_port": "49831",
+      "message": "CMD: exit"
+    },
+    {
+      "_time": "2026-08-04T11:33:55.000+00:00",
+      "eventid": "cowrie.session.params",
+      "session": "44d3ce58bdb1",
+      "src_ip": "10.0.2.3",
+      "src_port": "49831",
+      "message": ""
+    },
+    {
+      "_time": "2026-08-04T11:33:55.000+00:00",
+      "eventid": "cowrie.client.size",
+      "session": "44d3ce58bdb1",
+      "src_ip": "10.0.2.3",
+      "src_port": "49831",
+      "message": "Terminal Size: 120 30"
+    },
+    {
+      "_time": "2026-08-04T11:33:55.000+00:00",
+      "eventid": "cowrie.login.success",
+      "session": "44d3ce58bdb1",
+      "src_ip": "10.0.2.3",
+      "src_port": "49831",
+      "username": "admin",
+      "password": "root",
+      "message": "login attempt [admin/root] succeeded"
+    },
+    {
+      "_time": "2026-08-04T11:33:49.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "44d3ce58bdb1",
+      "src_ip": "10.0.2.3",
+      "src_port": "49831",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T11:33:40.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "44d3ce58bdb1",
+      "src_ip": "10.0.2.3",
+      "src_port": "49831",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T11:33:32.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "44d3ce58bdb1",
+      "src_ip": "10.0.2.3",
+      "src_port": "49831",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-08-04T11:33:32.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "44d3ce58bdb1",
+      "src_ip": "10.0.2.3",
+      "src_port": "49831",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-08-04T11:33:32.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "44d3ce58bdb1",
+      "src_ip": "10.0.2.3",
+      "src_port": "49831",
+      "message": "New connection: 10.0.2.3:49831 (10.0.2.15:2222) [session: 44d3ce58bdb1]"
+    },
+    {
+      "_time": "2026-08-04T12:24:58.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "8586a2622946",
+      "src_ip": "10.0.2.3",
+      "src_port": "60330",
+      "message": "Connection lost after 40656 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T12:24:58.000+00:00",
+      "eventid": "cowrie.log.closed",
+      "session": "8586a2622946",
+      "src_ip": "10.0.2.3",
+      "src_port": "60330",
+      "message": "Closing TTY Log: var/lib/cowrie/tty/2638f1c1c2018567a46a4cae049dd90db2d468e1538d60d328f2707d071f73c5 after 32573 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T12:24:58.000+00:00",
+      "eventid": "cowrie.command.input",
+      "session": "8586a2622946",
+      "src_ip": "10.0.2.3",
+      "src_port": "60330",
+      "message": "CMD: exit"
+    },
+    {
+      "_time": "2026-08-04T12:24:25.000+00:00",
+      "eventid": "cowrie.session.params",
+      "session": "8586a2622946",
+      "src_ip": "10.0.2.3",
+      "src_port": "60330",
+      "message": ""
+    },
+    {
+      "_time": "2026-08-04T12:24:25.000+00:00",
+      "eventid": "cowrie.client.size",
+      "session": "8586a2622946",
+      "src_ip": "10.0.2.3",
+      "src_port": "60330",
+      "message": "Terminal Size: 120 30"
+    },
+    {
+      "_time": "2026-08-04T12:24:25.000+00:00",
+      "eventid": "cowrie.login.success",
+      "session": "8586a2622946",
+      "src_ip": "10.0.2.3",
+      "src_port": "60330",
+      "username": "admin",
+      "password": "root",
+      "message": "login attempt [admin/root] succeeded"
+    },
+    {
+      "_time": "2026-08-04T12:24:22.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "8586a2622946",
+      "src_ip": "10.0.2.3",
+      "src_port": "60330",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T12:24:19.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "8586a2622946",
+      "src_ip": "10.0.2.3",
+      "src_port": "60330",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T12:24:17.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "8586a2622946",
+      "src_ip": "10.0.2.3",
+      "src_port": "60330",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-08-04T12:24:17.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "8586a2622946",
+      "src_ip": "10.0.2.3",
+      "src_port": "60330",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-08-04T12:24:17.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "8586a2622946",
+      "src_ip": "10.0.2.3",
+      "src_port": "60330",
+      "message": "New connection: 10.0.2.3:60330 (10.0.2.15:2222) [session: 8586a2622946]"
+    },
+    {
+      "_time": "2026-08-04T12:24:17.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "5d0412f00753",
+      "src_ip": "10.0.2.3",
+      "src_port": "60328",
+      "message": "Connection lost after 11559 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T12:24:14.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "5d0412f00753",
+      "src_ip": "10.0.2.3",
+      "src_port": "60328",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T12:24:11.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "5d0412f00753",
+      "src_ip": "10.0.2.3",
+      "src_port": "60328",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T12:24:07.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "5d0412f00753",
+      "src_ip": "10.0.2.3",
+      "src_port": "60328",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T12:24:04.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "5d0412f00753",
+      "src_ip": "10.0.2.3",
+      "src_port": "60328",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-08-04T12:24:04.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "5d0412f00753",
+      "src_ip": "10.0.2.3",
+      "src_port": "60328",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-08-04T12:24:04.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "5d0412f00753",
+      "src_ip": "10.0.2.3",
+      "src_port": "60328",
+      "message": "New connection: 10.0.2.3:60328 (10.0.2.15:2222) [session: 5d0412f00753]"
+    },
+    {
+      "_time": "2026-08-04T12:34:17.000+00:00",
+      "eventid": "cowrie.log.closed",
+      "session": "d31889a367a9",
+      "src_ip": "10.0.2.3",
+      "src_port": "62790",
+      "message": "Closing TTY Log: var/lib/cowrie/tty/2638f1c1c2018567a46a4cae049dd90db2d468e1538d60d328f2707d071f73c5 after 1647 milliseconds"
+    },
+    {
+      "_time": "2026-08-04T12:34:17.000+00:00",
+      "eventid": "cowrie.command.input",
+      "session": "d31889a367a9",
+      "src_ip": "10.0.2.3",
+      "src_port": "62790",
+      "message": "CMD: exit"
+    },
+    {
+      "_time": "2026-08-04T12:34:15.000+00:00",
+      "eventid": "cowrie.session.params",
+      "session": "d31889a367a9",
+      "src_ip": "10.0.2.3",
+      "src_port": "62790",
+      "message": ""
+    },
+    {
+      "_time": "2026-08-04T12:34:15.000+00:00",
+      "eventid": "cowrie.client.size",
+      "session": "d31889a367a9",
+      "src_ip": "10.0.2.3",
+      "src_port": "62790",
+      "message": "Terminal Size: 120 30"
+    },
+    {
+      "_time": "2026-08-04T12:34:15.000+00:00",
+      "eventid": "cowrie.login.success",
+      "session": "d31889a367a9",
+      "src_ip": "10.0.2.3",
+      "src_port": "62790",
+      "username": "admin",
+      "password": "root",
+      "message": "login attempt [admin/root] succeeded"
+    },
+    {
+      "_time": "2026-08-04T12:34:12.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "d31889a367a9",
+      "src_ip": "10.0.2.3",
+      "src_port": "62790",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T12:34:09.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "d31889a367a9",
+      "src_ip": "10.0.2.3",
+      "src_port": "62790",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-04T12:34:06.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "d31889a367a9",
+      "src_ip": "10.0.2.3",
+      "src_port": "62790",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-08-04T12:34:06.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "d31889a367a9",
+      "src_ip": "10.0.2.3",
+      "src_port": "62790",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-08-04T12:34:06.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "d31889a367a9",
+      "src_ip": "10.0.2.3",
+      "src_port": "62790",
+      "message": "New connection: 10.0.2.3:62790 (10.0.2.15:2222) [session: d31889a367a9]"
+    },
+    {
+      "_time": "2026-08-04T12:34:17.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "d31889a367a9",
+      "src_ip": "10.0.2.3",
+      "src_port": "62790",
+      "message": "Connection lost after 10339 milliseconds"
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "c7551af507fa",
+      "src_ip": "10.0.2.3",
+      "src_port": "50010",
+      "message": "Connection lost after 10281 milliseconds"
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.log.closed",
+      "session": "c7551af507fa",
+      "src_ip": "10.0.2.3",
+      "src_port": "50010",
+      "message": "Closing TTY Log: var/lib/cowrie/tty/2638f1c1c2018567a46a4cae049dd90db2d468e1538d60d328f2707d071f73c5 after 3624 milliseconds"
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.command.input",
+      "session": "c7551af507fa",
+      "src_ip": "10.0.2.3",
+      "src_port": "50010",
+      "message": "CMD: exit"
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.session.params",
+      "session": "c7551af507fa",
+      "src_ip": "10.0.2.3",
+      "src_port": "50010",
+      "message": ""
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.client.size",
+      "session": "c7551af507fa",
+      "src_ip": "10.0.2.3",
+      "src_port": "50010",
+      "message": "Terminal Size: 125 44"
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.login.success",
+      "session": "c7551af507fa",
+      "src_ip": "10.0.2.3",
+      "src_port": "50010",
+      "username": "admin",
+      "password": "root",
+      "message": "login attempt [admin/root] succeeded"
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "c7551af507fa",
+      "src_ip": "10.0.2.3",
+      "src_port": "50010",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "c7551af507fa",
+      "src_ip": "10.0.2.3",
+      "src_port": "50010",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "c7551af507fa",
+      "src_ip": "10.0.2.3",
+      "src_port": "50010",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "c7551af507fa",
+      "src_ip": "10.0.2.3",
+      "src_port": "50010",
+      "message": "New connection: 10.0.2.3:50010 (10.0.2.15:2222) [session: c7551af507fa]"
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "3d33d831d747",
+      "src_ip": "10.0.2.3",
+      "src_port": "49956",
+      "message": "Connection lost after 43478 milliseconds"
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.log.closed",
+      "session": "3d33d831d747",
+      "src_ip": "10.0.2.3",
+      "src_port": "49956",
+      "message": "Closing TTY Log: var/lib/cowrie/tty/2638f1c1c2018567a46a4cae049dd90db2d468e1538d60d328f2707d071f73c5 after 38161 milliseconds"
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.command.input",
+      "session": "3d33d831d747",
+      "src_ip": "10.0.2.3",
+      "src_port": "49956",
+      "message": "CMD: exit"
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.session.params",
+      "session": "3d33d831d747",
+      "src_ip": "10.0.2.3",
+      "src_port": "49956",
+      "message": ""
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.client.size",
+      "session": "3d33d831d747",
+      "src_ip": "10.0.2.3",
+      "src_port": "49956",
+      "message": "Terminal Size: 125 44"
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.login.success",
+      "session": "3d33d831d747",
+      "src_ip": "10.0.2.3",
+      "src_port": "49956",
+      "username": "admin",
+      "password": "root",
+      "message": "login attempt [admin/root] succeeded"
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "3d33d831d747",
+      "src_ip": "10.0.2.3",
+      "src_port": "49956",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "3d33d831d747",
+      "src_ip": "10.0.2.3",
+      "src_port": "49956",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-08-03T16:41:39.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "3d33d831d747",
+      "src_ip": "10.0.2.3",
+      "src_port": "49956",
+      "message": "New connection: 10.0.2.3:49956 (10.0.2.15:2222) [session: 3d33d831d747]"
+    },
+    {
+      "_time": "2026-08-03T17:13:00.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "69a4f34f04dd",
+      "src_ip": "10.0.2.3",
+      "src_port": "50835",
+      "message": "Connection lost after 10156 milliseconds"
+    },
+    {
+      "_time": "2026-08-03T17:13:00.000+00:00",
+      "eventid": "cowrie.log.closed",
+      "session": "69a4f34f04dd",
+      "src_ip": "10.0.2.3",
+      "src_port": "50835",
+      "message": "Closing TTY Log: var/lib/cowrie/tty/2638f1c1c2018567a46a4cae049dd90db2d468e1538d60d328f2707d071f73c5 after 3903 milliseconds"
+    },
+    {
+      "_time": "2026-08-03T17:13:00.000+00:00",
+      "eventid": "cowrie.command.input",
+      "session": "69a4f34f04dd",
+      "src_ip": "10.0.2.3",
+      "src_port": "50835",
+      "message": "CMD: exit"
+    },
+    {
+      "_time": "2026-08-03T17:12:56.000+00:00",
+      "eventid": "cowrie.session.params",
+      "session": "69a4f34f04dd",
+      "src_ip": "10.0.2.3",
+      "src_port": "50835",
+      "message": ""
+    },
+    {
+      "_time": "2026-08-03T17:12:56.000+00:00",
+      "eventid": "cowrie.client.size",
+      "session": "69a4f34f04dd",
+      "src_ip": "10.0.2.3",
+      "src_port": "50835",
+      "message": "Terminal Size: 125 44"
+    },
+    {
+      "_time": "2026-08-03T17:12:56.000+00:00",
+      "eventid": "cowrie.login.success",
+      "session": "69a4f34f04dd",
+      "src_ip": "10.0.2.3",
+      "src_port": "50835",
+      "username": "admin",
+      "password": "root",
+      "message": "login attempt [admin/root] succeeded"
+    },
+    {
+      "_time": "2026-08-03T17:12:53.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "69a4f34f04dd",
+      "src_ip": "10.0.2.3",
+      "src_port": "50835",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-03T17:12:50.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "69a4f34f04dd",
+      "src_ip": "10.0.2.3",
+      "src_port": "50835",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-08-03T17:12:50.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "69a4f34f04dd",
+      "src_ip": "10.0.2.3",
+      "src_port": "50835",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-08-03T17:12:50.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "69a4f34f04dd",
+      "src_ip": "10.0.2.3",
+      "src_port": "50835",
+      "message": "New connection: 10.0.2.3:50835 (10.0.2.15:2222) [session: 69a4f34f04dd]"
+    },
+    {
+      "_time": "2026-08-03T17:12:45.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "edc3d66dbf5f",
+      "src_ip": "10.0.2.3",
+      "src_port": "50828",
+      "message": "Connection lost after 120071 milliseconds"
+    },
+    {
+      "_time": "2026-08-03T17:11:38.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "edc3d66dbf5f",
+      "src_ip": "10.0.2.3",
+      "src_port": "50828",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-08-03T17:10:45.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "edc3d66dbf5f",
+      "src_ip": "10.0.2.3",
+      "src_port": "50828",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-08-03T17:10:45.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "edc3d66dbf5f",
+      "src_ip": "10.0.2.3",
+      "src_port": "50828",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-08-03T17:10:45.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "edc3d66dbf5f",
+      "src_ip": "10.0.2.3",
+      "src_port": "50828",
+      "message": "New connection: 10.0.2.3:50828 (10.0.2.15:2222) [session: edc3d66dbf5f]"
+    },
+    {
+      "_time": "2026-08-03T13:06:10.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "53d81e3d484a",
+      "src_ip": "10.0.2.3",
+      "src_port": "54252",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-08-03T13:06:10.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "53d81e3d484a",
+      "src_ip": "10.0.2.3",
+      "src_port": "54252",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-08-03T13:06:10.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "53d81e3d484a",
+      "src_ip": "10.0.2.3",
+      "src_port": "54252",
+      "message": "New connection: 10.0.2.3:54252 (10.0.2.15:2222) [session: 53d81e3d484a]"
+    },
+    {
+      "_time": "2026-08-03T13:08:10.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "53d81e3d484a",
+      "src_ip": "10.0.2.3",
+      "src_port": "54252",
+      "message": "Connection lost after 120082 milliseconds"
+    },
+    {
+      "_time": "2026-07-31T15:35:35.000+00:00",
+      "eventid": "cowrie.log.closed",
+      "session": "265a0ef31321",
+      "src_ip": "10.0.2.3",
+      "src_port": "50043",
+      "message": "Closing TTY Log: var/lib/cowrie/tty/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 after 180069 milliseconds"
+    },
+    {
+      "_time": "2026-07-31T15:32:35.000+00:00",
+      "eventid": "cowrie.session.params",
+      "session": "265a0ef31321",
+      "src_ip": "10.0.2.3",
+      "src_port": "50043",
+      "message": ""
+    },
+    {
+      "_time": "2026-07-31T15:32:35.000+00:00",
+      "eventid": "cowrie.client.size",
+      "session": "265a0ef31321",
+      "src_ip": "10.0.2.3",
+      "src_port": "50043",
+      "message": "Terminal Size: 120 30"
+    },
+    {
+      "_time": "2026-07-31T15:32:35.000+00:00",
+      "eventid": "cowrie.login.success",
+      "session": "265a0ef31321",
+      "src_ip": "10.0.2.3",
+      "src_port": "50043",
+      "username": "admin",
+      "password": "root",
+      "message": "login attempt [admin/root] succeeded"
+    },
+    {
+      "_time": "2026-07-31T15:32:32.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "265a0ef31321",
+      "src_ip": "10.0.2.3",
+      "src_port": "50043",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-07-31T15:32:27.000+00:00",
+      "eventid": "cowrie.login.failed",
+      "session": "265a0ef31321",
+      "src_ip": "10.0.2.3",
+      "src_port": "50043",
+      "username": "admin",
+      "password": "admin123",
+      "message": "login attempt [admin/admin123] failed"
+    },
+    {
+      "_time": "2026-07-31T15:32:24.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "265a0ef31321",
+      "src_ip": "10.0.2.3",
+      "src_port": "50043",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-07-31T15:32:24.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "265a0ef31321",
+      "src_ip": "10.0.2.3",
+      "src_port": "50043",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-07-31T15:32:24.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "265a0ef31321",
+      "src_ip": "10.0.2.3",
+      "src_port": "50043",
+      "message": "New connection: 10.0.2.3:50043 (10.0.2.15:2222) [session: 265a0ef31321]"
+    },
+    {
+      "_time": "2026-07-31T15:30:09.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "c5d1b400d6c5",
+      "src_ip": "10.0.2.3",
+      "src_port": "49829",
+      "message": "Connection lost after 19567 milliseconds"
+    },
+    {
+      "_time": "2026-07-31T15:30:09.000+00:00",
+      "eventid": "cowrie.log.closed",
+      "session": "c5d1b400d6c5",
+      "src_ip": "10.0.2.3",
+      "src_port": "49829",
+      "message": "Closing TTY Log: var/lib/cowrie/tty/2638f1c1c2018567a46a4cae049dd90db2d468e1538d60d328f2707d071f73c5 after 16619 milliseconds"
+    },
+    {
+      "_time": "2026-07-31T15:30:09.000+00:00",
+      "eventid": "cowrie.command.input",
+      "session": "c5d1b400d6c5",
+      "src_ip": "10.0.2.3",
+      "src_port": "49829",
+      "message": "CMD: exit"
+    },
+    {
+      "_time": "2026-07-31T15:29:52.000+00:00",
+      "eventid": "cowrie.session.params",
+      "session": "c5d1b400d6c5",
+      "src_ip": "10.0.2.3",
+      "src_port": "49829",
+      "message": ""
+    },
+    {
+      "_time": "2026-07-31T15:29:52.000+00:00",
+      "eventid": "cowrie.client.size",
+      "session": "c5d1b400d6c5",
+      "src_ip": "10.0.2.3",
+      "src_port": "49829",
+      "message": "Terminal Size: 120 30"
+    },
+    {
+      "_time": "2026-07-31T15:29:52.000+00:00",
+      "eventid": "cowrie.login.success",
+      "session": "c5d1b400d6c5",
+      "src_ip": "10.0.2.3",
+      "src_port": "49829",
+      "username": "admin",
+      "password": "root",
+      "message": "login attempt [admin/root] succeeded"
+    },
+    {
+      "_time": "2026-07-31T15:29:49.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "c5d1b400d6c5",
+      "src_ip": "10.0.2.3",
+      "src_port": "49829",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-07-31T15:29:49.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "c5d1b400d6c5",
+      "src_ip": "10.0.2.3",
+      "src_port": "49829",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-07-31T15:29:49.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "c5d1b400d6c5",
+      "src_ip": "10.0.2.3",
+      "src_port": "49829",
+      "message": "New connection: 10.0.2.3:49829 (10.0.2.15:2222) [session: c5d1b400d6c5]"
+    },
+    {
+      "_time": "2026-07-31T15:35:35.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "265a0ef31321",
+      "src_ip": "10.0.2.3",
+      "src_port": "50043",
+      "message": "Connection lost after 191145 milliseconds"
+    },
+    {
+      "_time": "2026-07-31T01:47:01.000+00:00",
+      "eventid": "cowrie.command.input",
+      "session": "a4a968fdf623",
+      "src_ip": "10.0.2.3",
+      "src_port": "53397",
+      "message": "CMD: exit"
+    },
+    {
+      "_time": "2026-07-31T01:47:01.000+00:00",
+      "eventid": "cowrie.command.input",
+      "session": "a4a968fdf623",
+      "src_ip": "10.0.2.3",
+      "src_port": "53397",
+      "message": "CMD: ls"
+    },
+    {
+      "_time": "2026-07-31T01:47:01.000+00:00",
+      "eventid": "cowrie.command.input",
+      "session": "a4a968fdf623",
+      "src_ip": "10.0.2.3",
+      "src_port": "53397",
+      "message": "CMD: whoami"
+    },
+    {
+      "_time": "2026-07-31T01:47:01.000+00:00",
+      "eventid": "cowrie.session.params",
+      "session": "a4a968fdf623",
+      "src_ip": "10.0.2.3",
+      "src_port": "53397",
+      "message": ""
+    },
+    {
+      "_time": "2026-07-31T01:47:01.000+00:00",
+      "eventid": "cowrie.client.size",
+      "session": "a4a968fdf623",
+      "src_ip": "10.0.2.3",
+      "src_port": "53397",
+      "message": "Terminal Size: 120 30"
+    },
+    {
+      "_time": "2026-07-31T01:47:01.000+00:00",
+      "eventid": "cowrie.login.success",
+      "session": "a4a968fdf623",
+      "src_ip": "10.0.2.3",
+      "src_port": "53397",
+      "username": "admin",
+      "password": "Cysec123$",
+      "message": "login attempt [admin/Cysec123$] succeeded"
+    },
+    {
+      "_time": "2026-07-31T01:47:01.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "a4a968fdf623",
+      "src_ip": "10.0.2.3",
+      "src_port": "53397",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-07-31T01:47:01.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "a4a968fdf623",
+      "src_ip": "10.0.2.3",
+      "src_port": "53397",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-07-31T01:47:01.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "a4a968fdf623",
+      "src_ip": "10.0.2.3",
+      "src_port": "53397",
+      "message": "New connection: 10.0.2.3:53397 (10.0.2.15:2222) [session: a4a968fdf623]"
+    },
+    {
+      "_time": "2026-07-31T02:05:16.000+00:00",
+      "eventid": "cowrie.command.input",
+      "session": "25424ae4ea02",
+      "src_ip": "10.0.2.3",
+      "src_port": "65241",
+      "message": "CMD: whoami"
+    },
+    {
+      "_time": "2026-07-31T02:05:01.000+00:00",
+      "eventid": "cowrie.session.params",
+      "session": "25424ae4ea02",
+      "src_ip": "10.0.2.3",
+      "src_port": "65241",
+      "message": ""
+    },
+    {
+      "_time": "2026-07-31T02:05:01.000+00:00",
+      "eventid": "cowrie.client.size",
+      "session": "25424ae4ea02",
+      "src_ip": "10.0.2.3",
+      "src_port": "65241",
+      "message": "Terminal Size: 120 30"
+    },
+    {
+      "_time": "2026-07-31T02:05:01.000+00:00",
+      "eventid": "cowrie.login.success",
+      "session": "25424ae4ea02",
+      "src_ip": "10.0.2.3",
+      "src_port": "65241",
+      "username": "admin",
+      "password": "ehfhifwefi",
+      "message": "login attempt [admin/ehfhifwefi] succeeded"
+    },
+    {
+      "_time": "2026-07-31T02:04:54.000+00:00",
+      "eventid": "cowrie.client.kex",
+      "session": "25424ae4ea02",
+      "src_ip": "10.0.2.3",
+      "src_port": "65241",
+      "message": "SSH client hassh fingerprint: ec7378c1a92f5a8dde7e8b7a1ddf33d1"
+    },
+    {
+      "_time": "2026-07-31T02:04:54.000+00:00",
+      "eventid": "cowrie.client.version",
+      "session": "25424ae4ea02",
+      "src_ip": "10.0.2.3",
+      "src_port": "65241",
+      "message": "Remote SSH version: SSH-2.0-OpenSSH_for_Windows_8.1"
+    },
+    {
+      "_time": "2026-07-31T02:04:54.000+00:00",
+      "eventid": "cowrie.session.connect",
+      "session": "25424ae4ea02",
+      "src_ip": "10.0.2.3",
+      "src_port": "65241",
+      "message": "New connection: 10.0.2.3:65241 (10.0.2.15:2222) [session: 25424ae4ea02]"
+    },
+    {
+      "_time": "2026-07-31T01:47:01.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "a4a968fdf623",
+      "src_ip": "10.0.2.3",
+      "src_port": "53397",
+      "message": "Connection lost after 89787 milliseconds"
+    },
+    {
+      "_time": "2026-07-31T01:47:01.000+00:00",
+      "eventid": "cowrie.log.closed",
+      "session": "a4a968fdf623",
+      "src_ip": "10.0.2.3",
+      "src_port": "53397",
+      "message": "Closing TTY Log: var/lib/cowrie/tty/06d0e479ecd857a59890f05193a6d62a7de973cc9d35c25cf24dfad9db9b09e7 after 82202 milliseconds"
+    },
+    {
+      "_time": "2026-07-31T02:08:15.000+00:00",
+      "eventid": "cowrie.log.closed",
+      "session": "25424ae4ea02",
+      "src_ip": "10.0.2.3",
+      "src_port": "65241",
+      "message": "Closing TTY Log: var/lib/cowrie/tty/cd506fc98fb46aa8f4c68d7e0110b23d86e782314801bfe70c832597b5aae78d after 194483 milliseconds"
+    },
+    {
+      "_time": "2026-07-31T02:08:18.000+00:00",
+      "eventid": "cowrie.session.closed",
+      "session": "25424ae4ea02",
+      "src_ip": "10.0.2.3",
+      "src_port": "65241",
+      "message": "Connection lost after 204806 milliseconds"
+    }
+  ],
+  "failed_logins": [
+    {
+      "_time": "2026-08-22T08:38:18.929+00:00",
+      "Account_Name": [
+        "-",
+        "eviluser"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-22T08:38:16.805+00:00",
+      "Account_Name": [
+        "-",
+        "eviluser"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-22T08:38:14.653+00:00",
+      "Account_Name": [
+        "-",
+        "eviluser"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-22T08:38:12.516+00:00",
+      "Account_Name": [
+        "-",
+        "eviluser"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-22T08:38:10.402+00:00",
+      "Account_Name": [
+        "-",
+        "eviluser"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-22T08:38:08.247+00:00",
+      "Account_Name": [
+        "-",
+        "eviluser"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-22T08:37:36.025+00:00",
+      "Account_Name": [
+        "-",
+        "eviluser"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-22T08:37:33.901+00:00",
+      "Account_Name": [
+        "-",
+        "eviluser"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-22T08:37:31.786+00:00",
+      "Account_Name": [
+        "-",
+        "eviluser"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-22T08:37:29.623+00:00",
+      "Account_Name": [
+        "-",
+        "eviluser"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-22T08:37:27.529+00:00",
+      "Account_Name": [
+        "-",
+        "eviluser"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-22T08:37:25.138+00:00",
+      "Account_Name": [
+        "-",
+        "eviluser"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-22T08:17:15.727+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T17:20:08.356+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T17:20:08.347+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T17:20:08.333+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T17:20:03.263+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T17:20:03.215+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T17:19:58.266+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T17:15:15.857+00:00",
+      "Account_Name": [
+        "-",
+        "bmlegend"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T17:15:15.831+00:00",
+      "Account_Name": [
+        "-",
+        "bmlegend"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T17:15:08.761+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T17:15:08.750+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T17:15:08.744+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T17:15:02.032+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T18:03:10.891+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T18:02:43.706+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T18:02:39.491+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T18:02:35.857+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T18:02:31.801+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T17:53:01.075+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T17:52:57.406+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T17:52:30.072+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T17:52:24.175+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T17:52:15.890+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T18:03:15.539+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T12:24:57.001+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T12:01:02.331+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T12:01:02.311+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T12:00:50.443+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T11:39:34.447+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T11:37:32.790+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-04T12:25:14.945+00:00",
+      "Account_Name": [
+        "-",
+        "bmlegend"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-03T16:59:03.580+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-03T16:59:03.567+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-03T16:58:52.870+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-03T16:57:15.895+00:00",
+      "Account_Name": [
+        "-",
+        "baduser"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:44:42.214+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:44:42.192+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:44:42.166+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:44:36.848+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:44:36.838+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:44:31.400+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:44:31.375+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:44:25.998+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:42:43.175+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:42:37.800+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:40:23.796+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:40:23.759+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:40:23.734+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:40:18.337+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:40:18.299+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:40:12.922+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:40:12.892+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:40:07.485+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T13:08:57.002+00:00",
+      "Account_Name": [
+        "DESKTOP-G38AOOL$",
+        "-"
+      ],
+      "Source_Network_Address": "127.0.0.1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "2"
+    },
+    {
+      "_time": "2026-07-18T13:08:54.370+00:00",
+      "Account_Name": [
+        "DESKTOP-G38AOOL$",
+        "-"
+      ],
+      "Source_Network_Address": "127.0.0.1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "2"
+    },
+    {
+      "_time": "2026-07-18T12:55:43.331+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:46:26.955+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:46:25.736+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:46:24.559+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:46:23.319+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:45:25.291+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:45:25.257+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:45:25.249+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:45:19.872+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:45:19.855+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:45:19.833+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:45:14.511+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:45:14.482+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:45:09.154+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "::1",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T13:34:46.945+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T13:34:45.823+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T13:34:44.691+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T13:31:18.032+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T13:31:16.858+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T13:31:15.631+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T13:31:14.453+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:55:46.918+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:55:45.701+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T12:55:44.528+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-07-18T13:34:48.171+00:00",
+      "Account_Name": [
+        "-",
+        "bmleg"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    }
+  ],
+  "successful_logons": [
+    {
+      "_time": "2026-08-22T08:20:13.285+00:00",
+      "Account_Name": [
+        "-",
+        "eviluser"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    },
+    {
+      "_time": "2026-08-22T08:38:53.709+00:00",
+      "Account_Name": [
+        "-",
+        "eviluser"
+      ],
+      "Source_Network_Address": "10.0.2.3",
+      "host": "DESKTOP-G38AOOL",
+      "Logon_Type": "3"
+    }
+  ],
+  "account_creations": [
+    {
+      "_time": "2026-08-22T08:39:43.532+00:00",
+      "host": "DESKTOP-G38AOOL",
+      "Account_Name": [
+        "bmleg",
+        "backdoor"
+      ]
+    },
+    {
+      "_time": "2026-08-22T08:19:55.043+00:00",
+      "host": "DESKTOP-G38AOOL",
+      "Account_Name": [
+        "bmleg",
+        "eviluser"
+      ]
+    },
+    {
+      "_time": "2026-08-22T08:03:20.719+00:00",
+      "host": "DESKTOP-G38AOOL",
+      "Account_Name": [
+        "bmleg",
+        "evilusessr"
+      ]
+    },
+    {
+      "_time": "2026-08-22T08:03:12.552+00:00",
+      "host": "DESKTOP-G38AOOL",
+      "Account_Name": [
+        "bmleg",
+        "eviluser"
+      ]
+    },
+    {
+      "_time": "2026-07-17T10:31:54.829+00:00",
+      "host": "DESKTOP-G38AOOL",
+      "Account_Name": [
+        "WIN-PSNCDIQE855$",
+        "bmleg"
+      ]
+    },
+    {
+      "_time": "2026-07-17T22:34:58.030+00:00",
+      "host": "DESKTOP-G38AOOL",
+      "Account_Name": [
+        "WIN-PSNCDIQE855$",
+        "defaultuser0"
+      ]
+    },
+    {
+      "_time": "2026-07-17T22:32:54.909+00:00",
+      "host": "DESKTOP-G38AOOL",
+      "Account_Name": [
+        "MINWINPC$",
+        "WDAGUtilityAccount"
+      ]
+    }
+  ]
+}
