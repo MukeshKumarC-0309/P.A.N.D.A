@@ -1,0 +1,5 @@
+# Optional [ai] extra — LLM-polished reports (crewai + Gemini via LiteLLM).
+# NOT needed to run PANDA: without it, reports are the deterministic cards.
+# Install with:  pip install -r requirements-ai.txt
+# Also set GEMINI_API_KEY in the environment / .env to actually polish.
+crewai
