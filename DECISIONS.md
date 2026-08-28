@@ -11,13 +11,15 @@ end for where the deeper restructuring history lives.
 - **Vault** — an encrypted, per-device record store behind a
   bcrypt-hashed password. Data is unreadable at rest and never written to
   disk in the clear.
-- **TDR** — a detection pipeline (Splunk telemetry from an SSH honeypot
-  and Windows Security logs → correlation + standalone detections →
-  graded-confidence incident reports). Built on a separate track; the
-  vault is its secure evidence store.
+- **TDR** — a detection engine (honeypot + Windows Security telemetry →
+  correlation + standalone detections → graded-confidence incident cases).
+  The vault is its secure evidence store.
 
-This repo is the vault + platform core (auth, encrypted storage, command
-dispatch, case store) that TDR plugs into.
+TDR is **integrated into this repo**: the deterministic engine is vendored
+under `panda_tdr/`, and `panda/bridge.py` runs it and persists findings
+through the vault. The core is offline; two opt-in extras (`[ai]`, `[live]`)
+add an LLM report polish and a live Splunk pull. The vendored engine's own
+lineage lives in the separate TDR repo.
 
 ## Security decisions
 
@@ -46,10 +48,12 @@ dispatch, case store) that TDR plugs into.
    table/column identifiers against a strict whitelist (identifiers can't
    be bound, so they're validated instead). User input is never
    interpolated into SQL.
-4. **No secrets, no network.** Fully offline, embedded SQLite: no server,
-   no credentials, no API keys. `config.py` reads only the (optional)
-   vault path — there is no import-time key check to satisfy, so any
-   component (including TDR) can import config without extra config.
+4. **Offline core, no secrets.** The core is fully offline, embedded
+   SQLite: no server, no credentials, no API keys. `config.py` reads only
+   the (optional) vault path — no import-time key check, so any component
+   (including TDR) imports config without extra config. The **only** network
+   paths are the two strictly opt-in extras (`[ai]`, `[live]`), whose
+   dependencies are imported lazily so a core install never loads them.
 
 ## Case store (TDR evidence)
 
@@ -145,7 +149,7 @@ technical report (the deterministic analyst card).
   readable rule path and methodology demo, not generalization evidence.
   The alert card cites only the features the fitted tree actually split on.
 
-## `[ai]` extra — LLM-polished reports (Step 3a, opt-in)
+## `[ai]` extra — LLM-polished reports (Step 3, opt-in)
 
 crewai + Gemini polish report **wording only**; the deterministic card
 stays the source of truth. This is a strict opt-in that never weakens the
@@ -156,8 +160,8 @@ offline core.
   covering both "extra not installed" and "installed but unconfigured".
   crewai is imported **only inside** the returned polish function, so a
   core install never touches it. `make_polisher(kind)` builds either the
-  whole-card polisher (`card`, used now) or the section polisher
-  (`section`, for 3b) from the one scaffold.
+  whole-card polisher (`card`, for correlation reports) or the section
+  polisher (`section`, for incident reports) from the one scaffold.
 - **Two stdlib guards, one discipline.** `polish_guard.guarded_polish`
   guards the whole correlation card (rejects LaTeX, a dropped/fabricated
   IP, a missing severity word). `incident_polish` guards the advanced
