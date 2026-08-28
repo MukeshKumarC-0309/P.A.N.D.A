@@ -1,0 +1,21 @@
+# Secrets
+.env
+
+# Runtime-generated files
+password.txt
+rmr.txt
+
+# Local SQLite vault(s) — never commit a user's data
+*.db
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+.pytest_cache/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store

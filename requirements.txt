@@ -1,0 +1,6 @@
+tabulate
+python-dotenv
+bcrypt
+cryptography
+pandas
+scikit-learn
