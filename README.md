@@ -1,5 +1,7 @@
 # P.A.N.D.A
 
+[![tests](https://github.com/MukeshKumarC-0309/P.A.N.D.A/actions/workflows/tests.yml/badge.svg)](https://github.com/MukeshKumarC-0309/P.A.N.D.A/actions/workflows/tests.yml)
+
 A local-first **security platform** in Python. One product, two capabilities
 on one hardened core:
 
