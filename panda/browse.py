@@ -11,12 +11,20 @@ from tabulate import tabulate
 
 from panda import cases
 
+# Cap the free-text columns so long titles/summaries/evidence wrap instead of
+# blowing a case table past the terminal width. None = no cap; ints wrap. Lengths
+# are per-column, matching each table's header order.
+_CASES_WIDTHS = [None, None, 34, None, None, None, None, 44]        # Title, Summary
+_DET_WIDTHS = [None] * 9 + [50]                                     # Evidence
+_RELATED_WIDTHS = [None, 44, None]                                  # Title
+
 
 def browse_cases():
     """List cases (optionally filtered by severity), then drill into one."""
     sev = input("Filter by severity? ( low | medium | high | critical, blank = all ) : ").strip()
     header = ["Case ID", "Created", "Title", "Severity", "Confidence", "Status", "Source IP", "Summary"]
-    print(tabulate(cases.list_cases(sev or None), headers=header, tablefmt="grid"))
+    print(tabulate(cases.list_cases(sev or None), headers=header, tablefmt="grid",
+                   maxcolwidths=_CASES_WIDTHS))
     pick = input("Enter a Case ID to open ( blank to go back ) : ").strip()
     if not pick.isdigit():
         print()
@@ -30,7 +38,8 @@ def browse_cases():
     det_header = ["Detection ID", "Case ID", "Detected", "Rule", "Source",
                   "Severity", "Confidence", "Source IP", "Username", "Evidence"]
     print("\nDetections:")
-    print(tabulate(cases.get_detections(cid), headers=det_header, tablefmt="grid"))
+    print(tabulate(cases.get_detections(cid), headers=det_header, tablefmt="grid",
+                   maxcolwidths=_DET_WIDTHS))
 
     # Other cases keyed on the same source IP — the same actor seen through a
     # different lens (e.g. a Windows kill chain and a cross-source correlation).
@@ -40,7 +49,8 @@ def browse_cases():
     if related:
         print("\nRelated cases (same source IP {}):".format(source_ip))
         print(tabulate([(r[0], r[2], r[3]) for r in related],
-                       headers=["Case ID", "Title", "Severity"], tablefmt="grid"))
+                       headers=["Case ID", "Title", "Severity"], tablefmt="grid",
+                       maxcolwidths=_RELATED_WIDTHS))
     reps = cases.get_reports(cid)
     print("\nReports:")
     print(tabulate([(r[0], r[2], r[3]) for r in reps],
