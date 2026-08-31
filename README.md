@@ -55,6 +55,22 @@ Severity is a **fixed, auditable policy**, encoded as a shallow decision tree
 data. Every fact traces to the source events, and the reports state their honest
 limits plainly (see the model caveat in [DECISIONS.md](DECISIONS.md)).
 
+**ML methodology (separate, synthetic).** Production scoring stays deterministic
+on purpose; as a distinct exercise, `panda_tdr/severity_experiment.py`
+demonstrates the ML methodology on a *synthetic* dataset with realistic feature
+correlations and **injected label noise** (so perfect accuracy is impossible and
+the held-out score is meaningful). It does a stratified train/test split and
+reports honest metrics — test accuracy vs. a majority baseline, macro-F1, a
+confusion matrix, feature importances, and the train-vs-test generalization gap:
+
+```bash
+python -m panda_tdr.severity_experiment
+```
+
+The claim is deliberately narrow: it shows sound methodology (train/test
+discipline, class imbalance, interpretability) on synthetic data — **not**
+real-world detection accuracy, which would need real labeled incidents.
+
 ### One incident, one case — linked by source IP
 
 Findings are **de-duplicated within a subsystem** (a standalone Windows
@@ -147,6 +163,7 @@ PANDA/
 │   ├── detections.py  windows_records.py  incident_report.py   # Windows detectors
 │   ├── correlation.py  cowrie_records.py                       # cross-source join
 │   ├── severity_model.py  alerting.py  reporter.py             # scoring + alert card
+│   ├── severity_experiment.py                                  # synthetic ML methodology demo (not production)
 │   ├── snapshot.py                                             # offline source
 │   ├── polish.py  polish_guard.py  incident_polish.py  llm.py  crews/  # [ai]
 │   └── live.py  splunk_client.py  windows_source.py  cowrie_source.py  # [live]

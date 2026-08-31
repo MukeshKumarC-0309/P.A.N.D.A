@@ -156,6 +156,29 @@ technical report (the deterministic analyst card).
   readable rule path and methodology demo, not generalization evidence.
   The alert card cites only the features the fitted tree actually split on.
 
+## Severity: deterministic policy + a separate synthetic ML benchmark
+
+Two things, kept apart on purpose:
+
+- **Production scoring is a deterministic, auditable policy** (not a learned
+  model). This preserves the "every fact traces / deterministic by default"
+  thesis — a case's severity is a rule an analyst can read, not a prediction.
+- **`panda_tdr/severity_experiment.py` is a separate ML methodology demo** on
+  *synthetic* data. The honest-ML problem is made real by **label noise**:
+  training a model on the policy's own noiseless labels would just recover the
+  rule (~100%, meaningless), so the labels get Gaussian noise on the risk score
+  before bucketing — boundary cases become genuinely ambiguous. It then does a
+  stratified train/test split and reports **held-out** metrics (test accuracy
+  vs. a majority baseline, macro-F1, confusion matrix, feature importances, the
+  train-vs-test gap). Result profile is honest by design: clearly beats the
+  baseline, well short of 1.0, small generalization gap.
+- **Why this is defensible, not inflation.** The claim is scoped in the module
+  docstring, the report footer, and the README: it demonstrates ML methodology
+  (train/test discipline, class imbalance, interpretability) on synthetic data,
+  and explicitly does **not** claim real-world detection accuracy — that needs
+  real labeled incidents, which don't exist here. The experiment never touches
+  the production path.
+
 ## `[ai]` extra — LLM-polished reports (Step 3, opt-in)
 
 crewai + Gemini polish report **wording only**; the deterministic card
