@@ -9,7 +9,8 @@ project is stable. See README.md for notes on that.
 PANDA is security-only: the one built-in domain is the TDR evidence store
 (browsed via CASES, which shares panda/browse.py with the top-level `cases`
 command). Users can still define and query their own tables at runtime through
-CREATOR / DEVELOPER mode. The database is embedded SQLite (stdlib sqlite3): a
+CREATOR mode — all of it goes through the validated DAO, never raw SQL on user
+input. The database is embedded SQLite (stdlib sqlite3): a
 single local file per device (config.DB_PATH), created empty on first run from
 schema.sql — a zero-install, offline, per-user tool.
 """
@@ -18,7 +19,7 @@ import sqlite3
 from tabulate import tabulate
 
 from panda.db import connection as conobj, cursor as cur
-from panda.db import safe_identifier as _safe_identifier
+from panda.db import safe_identifier as _safe_identifier, insert
 from panda.browse import browse_cases
 
 
@@ -44,66 +45,64 @@ def DATABASE():
         print("CASES : Browse the TDR evidence store - stored detections and incident reports, filterable by severity")
         print("\nBelow listed are commands that will help you access the features of P.A.N.D.A databases")
         print("\nSHOW TABLES:This command allows you to see what tables you have created so far")
-        print("DEVELOPER MODE:This command allows you to make changes to the record structure of the table(can only be accessed through our special passcode)")
         print("CREATOR MODE:This command allows you to create your own tables and maintain your own record")
         print("-"*100)
-    def USER():
-        #DEVELOPER MODE where you ( the developer ) can directly input code
-        while True:
-            try:
-                inp=input("What do you want to do ? ")
-                cur.execute(inp)
-                conobj.commit()
-            except Exception:
-                print("P.A.N.D.A : An unexpected error has occurred.")
-                print("P.A.N.D.A : Please try again.")
-            inp5=input("Do you want to continue using DEVELOPER MODE ? ")
-            if inp5.upper()=="YES":
-                continue
-            else:
-                print("Exiting DEVELOPER MODE...")
-                return
     def panda_create():
         ch=input("Enter table name : ")
-        execute15="create table if not exists {}(Serial_No TEXT)".format(ch)
-        cur.execute(execute15)
+        try:
+            table=_safe_identifier(ch)
+        except ValueError:
+            print("P.A.N.D.A : Invalid table name.")
+            print("P.A.N.D.A : Use letters, digits and underscores only.")
+            print()
+            return
+        # Identifiers can't be bound as parameters, so validate them against the
+        # whitelist before interpolating — no raw user input reaches the DDL.
+        cur.execute("create table if not exists {}(Serial_No TEXT)".format(table))
+        conobj.commit()
         while True:
             inp1=input("Enter field name (enter 'exit' to exit) : ")
             if inp1.upper()=="EXIT":
                 break
+            try:
+                column=_safe_identifier(inp1)
+            except ValueError:
+                print("P.A.N.D.A : Invalid field name.")
+                print("P.A.N.D.A : Use letters, digits and underscores only.")
+                continue
+            try:
+                cur.execute("alter table {} add column {} TEXT".format(table,column))
+            except sqlite3.Error:
+                print("P.A.N.D.A : An unexpected error has occured")
+                print("P.A.N.D.A : Please check the values again")
             else:
-                execute16="alter table {} add column {} TEXT".format(ch,inp1)
-                try:
-                    cur.execute(execute16)
-                except sqlite3.Error:
-                    print("P.A.N.D.A : An unexpected error has occured")
-                    print("P.A.N.D.A : Please check the values again")
-                else:
-                    conobj.commit()
+                conobj.commit()
         ch2=input("Do you want to add values ? ")
         if ch2.upper()=="YES":
             panda_add()
         print()
     def panda_add():
         ch=input("Enter your table name : ")
+        try:
+            table=_safe_identifier(ch)
+        except ValueError:
+            print("P.A.N.D.A : Invalid table name.")
+            print("P.A.N.D.A : Use letters, digits and underscores only.")
+            print()
+            return
         inp1=int(input("How many fields are there ? "))
         while True:
-            a=()
             inp2=input("Do you want to add records ? ")
-            if inp2.upper()=="YES":
-                for i in range(inp1):
-                    a+=(input("Enter Field 1 Value : "),)
-                print(a)
-                execute17="insert or ignore into {} values{}".format(ch,a)
-                try:
-                    cur.execute(execute17)
-                except sqlite3.Error:
-                    print("P.A.N.D.A : An unexpected error has occured")
-                    print("P.A.N.D.A : Please check the values again")
-                else:
-                    conobj.commit()
-            else:
+            if inp2.upper()!="YES":
                 break
+            values=tuple(input("Enter Field {} Value : ".format(i+1)) for i in range(inp1))
+            try:
+                # Through the DAO: the table name is validated and every value is
+                # bound as a ? parameter — no user input is interpolated into SQL.
+                insert(table, values, or_ignore=True)
+            except sqlite3.Error:
+                print("P.A.N.D.A : An unexpected error has occured")
+                print("P.A.N.D.A : Please check the values again")
         print()
     def SEARCH():
         inp7=input("Enter Table Name :")
@@ -154,30 +153,13 @@ def DATABASE():
     print("Here, you can browse TDR cases and manage your own records.")
     print()
     print("CREATOR MODE : Create and access your own tables ")
-    print("DEVELOPER MODE : Developer-exclusive tools to work on the Vault ")
     print()
     while True:
-        Choice=input("What do you want to access ( CASES | MODE | SHOW | SEARCH | HELP )?")
+        Choice=input("What do you want to access ( CASES | CREATOR | SHOW | SEARCH | HELP )?")
         if "CASES" in Choice.upper():
             CASES()
             print()
-        elif "DEVELOPER MODE" in Choice.upper():
-            #Executes functions to enable developer mode where developer can directly type in code
-            n=0
-            while n<3:
-                #Uses passcode authentication to ensure security
-                passcode=input("Please enter the passcode : ")
-                if passcode.upper()=="ILUVPANDAS":
-                    USER()
-                    break
-                else:
-                    print("P.A.N.D.A : Incorrect Passcode.")
-                    print("P.A.N.D.A : Try Again.")
-                    n+=1
-            if n==3:
-                print("P.A.N.D.A : You are out of attempts. ACCESS DENIED. ")
-            print()
-        elif "CREATOR MODE" in Choice.upper():
+        elif "CREATOR" in Choice.upper():
             #The creator mode asks for input from user, then accordingly calls functions to
             #create a new table, add a record to existing table, view tables or quit.
             while True:

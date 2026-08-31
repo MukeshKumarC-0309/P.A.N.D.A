@@ -47,7 +47,14 @@ lineage lives in the separate TDR repo.
    a small DAO that binds values as `?` parameters and validates
    table/column identifiers against a strict whitelist (identifiers can't
    be bound, so they're validated instead). User input is never
-   interpolated into SQL.
+   interpolated into SQL. This now holds **end to end**: the inherited
+   PandaVault "developer mode" — an arbitrary-SQL console (`cur.execute`
+   on raw input) gated by a hardcoded source passcode — was **removed**,
+   and CREATOR mode's table create/insert were routed through the DAO
+   (`safe_identifier` for the DDL identifiers, `db.insert` for the bound
+   values). So there is no raw-SQL-on-user-input path left in the vault
+   shell. Covered by `tests/test_creator_mode.py` (payload stored inert;
+   malicious table name rejected).
 4. **Offline core, no secrets.** The core is fully offline, embedded
    SQLite: no server, no credentials, no API keys. `config.py` reads only
    the (optional) vault path — no import-time key check, so any component
