@@ -46,13 +46,14 @@ persists each finding as a case with detections and reports:
   logons (4625), account creation (4720), and a multi-stage **kill chain**
   that stitches failed → successful (4624) → persistence into one confirmed
   intrusion, with a technical and a plain-language incident report.
-- **Cross-source correlation** (pandas + scikit-learn) — joins the Cowrie SSH
-  honeypot against Windows failed logons on source IP (and a username
-  fallback), scores severity with an interpretable decision tree, and renders
-  an analyst alert card.
+- **Cross-source correlation** (pandas) — joins the Cowrie SSH honeypot against
+  Windows failed logons on source IP (and a username fallback), grades severity,
+  and renders an analyst alert card.
 
-Every fact traces to the data; severity rules are deterministic policy, and the
-reports state their honest limits plainly.
+Severity is a **fixed, auditable policy**, encoded as a shallow decision tree
+(scikit-learn) for a readable rule path — *not* a model learned from real attack
+data. Every fact traces to the source events, and the reports state their honest
+limits plainly (see the model caveat in [DECISIONS.md](DECISIONS.md)).
 
 ### One incident, one case — linked by source IP
 
