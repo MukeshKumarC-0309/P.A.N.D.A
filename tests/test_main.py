@@ -99,3 +99,18 @@ def test_tdr_passes_live_flag(clean_password, monkeypatch):
     assert seen.get("live") is True
     main.handle_tdr("tdr fresh")
     assert seen.get("fresh") is True
+
+
+def test_tdr_anomaly_routes_to_anomaly_scan(clean_password, monkeypatch):
+    _set_password()
+    _mock_crypto(monkeypatch, [])
+    calls = []
+    monkeypatch.setattr(main.bridge, "scan_anomalies",
+                        lambda **kw: calls.append("anomaly") or
+                        {"source": "snapshot", "n_sources": 1, "insufficient": True,
+                         "min_sources": 8, "persisted": 0, "candidates": []})
+    monkeypatch.setattr(main.bridge, "scan_and_persist",
+                        lambda **kw: calls.append("scan") or {})
+    monkeypatch.setattr(builtins, "input", lambda *a, **k: "pw")
+    main.handle_tdr("tdr anomaly")
+    assert calls == ["anomaly"]                          # routed to the anomaly pass, not the scan

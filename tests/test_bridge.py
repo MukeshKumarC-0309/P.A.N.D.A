@@ -21,6 +21,44 @@ def test_default_source_is_snapshot(db):
     assert s["source"] == "snapshot"
 
 
+def test_scan_anomalies_insufficient_on_snapshot(db):
+    # The bundled snapshot has one non-loopback source -> honest "insufficient",
+    # nothing persisted.
+    s = bridge.scan_anomalies()
+    assert s["insufficient"] is True and s["persisted"] == 0
+    assert cases.list_cases() == []
+
+
+def _fabricated_snap():
+    from panda_tdr.windows_records import WindowsRecord
+    T = "2026-01-01T00:00:{:02d}+00:00".format
+
+    def w(ip, user, ts):
+        return WindowsRecord(timestamp=ts, event_id="4625", src_ip=ip,
+                             username=user, host="HOST1", logon_type="3")
+    failed = []
+    for i in range(9):                                   # quiet baseline sources
+        ip = "10.0.1.{}".format(i)
+        failed += [w(ip, "user", T(i)), w(ip, "user", T(i + 1))]
+    failed += [w("10.0.9.9", "acct{}".format(k), T(k % 60)) for k in range(80)]  # loud outlier
+    return {"failed": failed, "success": [], "cowrie": []}
+
+
+def test_scan_anomalies_persists_outliers_as_low_confidence_cases(db, monkeypatch):
+    monkeypatch.setattr(bridge, "_load_telemetry",
+                        lambda sp, live: (_fabricated_snap(), "test"))
+    s = bridge.scan_anomalies()
+    assert s["insufficient"] is False and s["persisted"] >= 1
+    # the loud source is surfaced as a low-confidence, clearly-labeled anomaly case
+    anomaly_cases = [c for c in cases.list_cases() if c[2].startswith("Anomaly candidate")]
+    assert any("10.0.9.9" in c[2] for c in anomaly_cases)
+    c = anomaly_cases[0]
+    assert c[4] == "low"                                 # confidence
+    dets = cases.get_detections(c[0])
+    assert dets and dets[0][3] == "anomaly"              # rule
+    assert cases.get_reports(c[0]) == []                 # anomaly candidates carry no report
+
+
 def test_fresh_rebuilds_instead_of_appending(db):
     first = bridge.scan_and_persist()
     assert len(cases.list_cases()) == first["cases"]

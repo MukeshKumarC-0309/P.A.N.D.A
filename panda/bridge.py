@@ -25,7 +25,7 @@ is a demo artifact, not a real risk.
 """
 
 from panda import cases
-from panda_tdr import correlation, live as live_source, polish
+from panda_tdr import anomaly, correlation, live as live_source, polish
 from panda_tdr.snapshot import load_snapshot
 from panda_tdr.alerting import build_alert
 from panda_tdr.detections import (
@@ -206,6 +206,67 @@ def _persist_correlation(inp, clf, summary, card_polisher):
     summary["reports"] += 1
 
 
+def _load_telemetry(snapshot_path, live):
+    """Return (telemetry dict, source label). Live when the [live] extra is
+    usable, else the snapshot — with the reason recorded in the label."""
+    if live and live_source.live_available():
+        return live_source.load_live(), "live (Splunk)"
+    if live:
+        snap = load_snapshot() if snapshot_path is None else load_snapshot(snapshot_path)
+        return snap, "snapshot (live unavailable — no splunk-sdk / credentials)"
+    snap = load_snapshot() if snapshot_path is None else load_snapshot(snapshot_path)
+    return snap, "snapshot"
+
+
+def _persist_anomaly(candidate, summary):
+    """Persist one anomaly candidate as a clearly-labeled, LOW-confidence case.
+
+    Advisory: no graded severity (a human grades it via the verdict), rule and
+    source both "anomaly", so it never masquerades as a rule-based finding.
+    """
+    f = candidate.features
+    line = (
+        f"Unsupervised layer flagged {candidate.src_ip} as anomalous "
+        f"(score {candidate.score}): {f.failed_attempts} failed logon(s) across "
+        f"{f.distinct_accounts} account(s), tempo {f.attempts_per_min}/min, "
+        f"{f.successes} success(es), {f.distinct_hosts} host(s), "
+        f"{f.cowrie_events} honeypot event(s). Advisory only — unusual, not "
+        f"confirmed malicious; review and mark a verdict."
+    )
+    case_id = cases.record_case(
+        title=f"Anomaly candidate: {candidate.src_ip}",
+        severity=None, confidence="low", source_ip=candidate.src_ip, summary=line)
+    cases.record_detection(
+        case_id, rule="anomaly", source="anomaly",
+        severity=None, confidence="low",
+        source_ip=candidate.src_ip, username=None, evidence=line)
+    summary["persisted"] += 1
+    summary["candidates"].append((candidate.src_ip, candidate.score))
+
+
+def scan_anomalies(snapshot_path=None, live=False, top_k=10):
+    """Run the unsupervised anomaly layer and persist the outliers as advisory,
+    low-confidence cases (browsable and verdict-able — the surface→label loop).
+
+    Requires an unlocked vault. Returns a summary. On thin data (too few
+    distinct sources to model) it persists nothing and reports `insufficient` —
+    the honest signal to point at a larger capture. Appends, like the main scan.
+    """
+    snap, source = _load_telemetry(snapshot_path, live)
+    result = anomaly.rank(snap, top_k=top_k)
+    summary = {
+        "source": source, "n_sources": result.n_sources,
+        "insufficient": result.insufficient, "min_sources": anomaly.MIN_SOURCES,
+        "persisted": 0, "candidates": [],
+    }
+    if result.insufficient:
+        return summary
+    for candidate in result.candidates:
+        if candidate.is_outlier:            # only surface actual outliers, not the whole top-K
+            _persist_anomaly(candidate, summary)
+    return summary
+
+
 def scan_and_persist(snapshot_path=None, card_polisher=None, section_polisher=None,
                      live=False, fresh=False):
     """Run the detectors + correlation over the telemetry and persist as cases.
@@ -235,14 +296,7 @@ def scan_and_persist(snapshot_path=None, card_polisher=None, section_polisher=No
     if section_polisher is None:
         section_polisher = polish.make_section_polisher()
 
-    if live and live_source.live_available():
-        snap, source = live_source.load_live(), "live (Splunk)"
-    elif live:
-        snap = load_snapshot() if snapshot_path is None else load_snapshot(snapshot_path)
-        source = "snapshot (live unavailable — no splunk-sdk / credentials)"
-    else:
-        snap = load_snapshot() if snapshot_path is None else load_snapshot(snapshot_path)
-        source = "snapshot"
+    snap, source = _load_telemetry(snapshot_path, live)
     cowrie, failed, success = snap["cowrie"], snap["failed"], snap["success"]
 
     account_dets = detect_account_creations(snap["creation_rows"])

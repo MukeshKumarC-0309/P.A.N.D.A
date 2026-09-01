@@ -112,19 +112,45 @@ def _print_scan_summary(s):
     print("P.A.N.D.A : Use the CASES command to browse them.")
 
 
+def _print_anomaly_summary(s):
+    """Print the result of an unsupervised anomaly scan."""
+    print("-" * 60)
+    print("P.A.N.D.A TDR : anomaly scan (advisory)")
+    print("-" * 60)
+    print(f" Source               : {s['source']}")
+    if s["insufficient"]:
+        print(f" Insufficient data    : {s['n_sources']} distinct source(s); "
+              f"need >= {s['min_sources']} to model.")
+        print(" Point at a larger capture (PANDA_SNAPSHOT) or run TDR LIVE.")
+    else:
+        print(f" Sources modeled      : {s['n_sources']}")
+        print(f" Anomaly candidates   : {s['persisted']} (low-confidence cases)")
+        for ip, score in s["candidates"]:
+            print(f"   - {ip}  (score {score})")
+        print("-" * 60)
+        print("P.A.N.D.A : Review them with CASES and mark a verdict.")
+
+
 def handle_tdr(query):
     """Run the TDR engine and persist findings.
 
     Offline snapshot by default; `tdr live` pulls from Splunk when the [live]
     extra is installed and configured, else degrades to the snapshot. `tdr fresh`
-    clears previously stored cases first (rebuild, not append). Set PANDA_SNAPSHOT
-    to point a scan at a different capture (e.g. a larger real dataset).
+    clears previously stored cases first (rebuild, not append). `tdr anomaly`
+    runs the unsupervised anomaly layer instead (advisory low-confidence cases).
+    Set PANDA_SNAPSHOT to point a scan at a different capture (e.g. a larger
+    real dataset).
     """
     live = router.matches("live", query)
     fresh = router.matches("fresh", query)
+    if router.matches("anomaly", query):
+        action = lambda: _print_anomaly_summary(bridge.scan_anomalies(
+            snapshot_path=config.SNAPSHOT_PATH, live=live))
+    else:
+        action = lambda: _print_scan_summary(bridge.scan_and_persist(
+            snapshot_path=config.SNAPSHOT_PATH, live=live, fresh=fresh))
     try:
-        _in_unlocked_vault(lambda: _print_scan_summary(bridge.scan_and_persist(
-            snapshot_path=config.SNAPSHOT_PATH, live=live, fresh=fresh)))
+        _in_unlocked_vault(action)
     except FileNotFoundError:
         _password_not_set()
         password()
