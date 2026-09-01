@@ -14,7 +14,7 @@ from panda import cases
 # Cap the free-text columns so long titles/summaries/evidence wrap instead of
 # blowing a case table past the terminal width. None = no cap; ints wrap. Lengths
 # are per-column, matching each table's header order.
-_CASES_WIDTHS = [None, None, 34, None, None, None, None, 44]        # Title, Summary
+_CASES_WIDTHS = [None, None, 34, None, None, None, None, 44, None]  # Title, Summary
 _DET_WIDTHS = [None] * 9 + [50]                                     # Evidence
 _RELATED_WIDTHS = [None, 44, None]                                  # Title
 
@@ -28,13 +28,17 @@ def _grid(rows, headers, widths):
     """
     if not rows:
         return tabulate(rows, headers=headers, tablefmt="grid")
-    return tabulate(rows, headers=headers, tablefmt="grid", maxcolwidths=widths)
+    # tabulate's column wrapper chokes on None cells (e.g. a NULL summary or
+    # disposition), so render them as empty strings first.
+    clean = [["" if cell is None else cell for cell in row] for row in rows]
+    return tabulate(clean, headers=headers, tablefmt="grid", maxcolwidths=widths)
 
 
 def browse_cases():
     """List cases (optionally filtered by severity), then drill into one."""
     sev = input("Filter by severity? ( low | medium | high | critical, blank = all ) : ").strip()
-    header = ["Case ID", "Created", "Title", "Severity", "Confidence", "Status", "Source IP", "Summary"]
+    header = ["Case ID", "Created", "Title", "Severity", "Confidence", "Status",
+              "Source IP", "Summary", "Disposition"]
     print(_grid(cases.list_cases(sev or None), header, _CASES_WIDTHS))
     pick = input("Enter a Case ID to open ( blank to go back ) : ").strip()
     if not pick.isdigit():
@@ -75,4 +79,20 @@ def browse_cases():
             print("-" * 100)
             print(report[4])  # body
             print("-" * 100)
+    _prompt_disposition(cid)
     print()
+
+
+def _prompt_disposition(case_id):
+    """Offer to record an analyst verdict on the open case (the ground-truth
+    capture that a future learning loop would train on). Blank = leave as-is."""
+    verdict = input(
+        "Mark this case ( confirmed | false_positive | benign, blank = skip ) : ").strip()
+    if not verdict:
+        return
+    try:
+        cases.set_disposition(case_id, verdict)
+    except ValueError:
+        print("P.A.N.D.A : Unknown verdict — leaving the case unmarked.")
+    else:
+        print("P.A.N.D.A : Recorded verdict '{}' on case {}.".format(verdict, case_id))

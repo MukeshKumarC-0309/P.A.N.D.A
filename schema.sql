@@ -31,7 +31,8 @@ CREATE TABLE IF NOT EXISTS cases (
     confidence TEXT,                    -- graded confidence (TDR states only what the data supports)
     status     TEXT NOT NULL DEFAULT 'open',
     source_ip  TEXT,                    -- shared attacker key, when correlated
-    summary    TEXT
+    summary    TEXT,
+    disposition TEXT                    -- analyst verdict: confirmed / false_positive / benign (NULL = unreviewed)
 );
 
 CREATE TABLE IF NOT EXISTS detections (

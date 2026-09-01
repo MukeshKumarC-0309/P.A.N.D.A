@@ -160,6 +160,12 @@ encryption-at-rest and login gate:
 - **`detections`** — the individual signals (rule, source, severity,
   confidence, IP, username, evidence).
 - **`reports`** — the write-up, one row per audience (`technical`, `plain`).
+- **`disposition`** — an optional analyst verdict on a case (`confirmed` /
+  `false_positive` / `benign`), set from the browse view. The engine grades
+  severity; a human records what the case *actually was*. It's ground-truth
+  capture — the foundation for a future human-in-the-loop learning layer
+  (independent labels being the real blocker to honest ML), and it changes no
+  detection logic.
 
 `detections` and `reports` are foreign-keyed to `cases` (an orphan is
 rejected). A scan writes with `cases.record_case` / `record_detection` /

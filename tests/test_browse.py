@@ -27,9 +27,9 @@ def test_browse_wraps_wide_columns(db, capsys, monkeypatch):
     cases.record_detection(cid, rule="correlation", source="cowrie+windows",
                            evidence="E" * 400)
 
-    # severity filter (blank) -> open the case -> report id (blank).
-    steps = iter(["", str(cid), ""])
-    monkeypatch.setattr(builtins, "input", lambda *a, **k: next(steps))
+    # severity filter (blank) -> open the case -> report id (blank) -> verdict (blank).
+    steps = iter(["", str(cid), "", ""])
+    monkeypatch.setattr(builtins, "input", lambda *a, **k: next(steps, ""))
     browse.browse_cases()
 
     out = capsys.readouterr().out
@@ -37,3 +37,13 @@ def test_browse_wraps_wide_columns(db, capsys, monkeypatch):
     assert longest <= MAX_LINE
     # The data is still there — wrapped across lines, not truncated away.
     assert "10.0.2.3" in out
+
+
+def test_browse_records_analyst_verdict(db, capsys, monkeypatch):
+    cid = cases.record_case(title="Suspicious", severity="high", source_ip="10.0.0.9")
+    # open the case -> skip report -> mark it confirmed
+    steps = iter(["", str(cid), "", "confirmed"])
+    monkeypatch.setattr(builtins, "input", lambda *a, **k: next(steps, ""))
+    browse.browse_cases()
+    assert cases.get_case(cid)[8] == "confirmed"        # verdict persisted
+    assert "Recorded verdict 'confirmed'" in capsys.readouterr().out

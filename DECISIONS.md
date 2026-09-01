@@ -90,6 +90,14 @@ encryption-at-rest and login gate as every other record.
   evidence, no double-counting), and the shared IP is how the analyst
   connects them. A null `source_ip` (e.g. an account-creation case) never
   links spuriously.
+- **Analyst verdict (`disposition`).** A nullable `cases.disposition` column
+  (`confirmed` / `false_positive` / `benign`; NULL = unreviewed), set from the
+  browse view via `cases.set_disposition`. It is **ground-truth capture**, not
+  ML: the engine's rules assign severity, but only a human records what a case
+  *actually was*. This is the foundation of a future human-in-the-loop learning
+  layer — independent labels are the real blocker to honest ML here, and this
+  is where they would accumulate. It changes no detection or severity logic;
+  the deterministic engine stays authoritative.
 
 ## TDR bridge (Step 1 — offline, deterministic)
 

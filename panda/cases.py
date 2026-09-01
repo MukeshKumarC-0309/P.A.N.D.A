@@ -98,6 +98,20 @@ def get_case(case_id):
     return rows[0] if rows else None
 
 
+# Allowed analyst verdicts. NULL (absent) means the case hasn't been reviewed.
+DISPOSITIONS = ("confirmed", "false_positive", "benign")
+
+
+def set_disposition(case_id, disposition):
+    """Record an analyst's verdict on a case (the ground-truth capture that a
+    future learning loop would train on). Raises ValueError on an unknown value.
+    Returns rows affected (0 if the case_id doesn't exist)."""
+    if disposition not in DISPOSITIONS:
+        raise ValueError("Invalid disposition: {!r} (use one of {})".format(
+            disposition, ", ".join(DISPOSITIONS)))
+    return db.update("cases", "disposition", disposition, "case_id", case_id)
+
+
 def clear_all():
     """Delete every stored case and its detections/reports.
 

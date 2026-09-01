@@ -80,6 +80,16 @@ def test_related_by_source_ip_links_and_excludes_self(db):
     assert [r[0] for r in related] == [b]
 
 
+def test_set_disposition_records_and_validates(db):
+    cid = cases.record_case(title="t", severity="high")
+    assert cases.get_case(cid)[8] is None            # unreviewed by default
+    assert cases.set_disposition(cid, "confirmed") == 1
+    assert cases.get_case(cid)[8] == "confirmed"
+    import pytest
+    with pytest.raises(ValueError):
+        cases.set_disposition(cid, "totally_made_up")
+
+
 def test_clear_all_empties_the_case_store(db):
     cid = cases.record_case(title="t", severity="high")
     cases.record_detection(cid, rule="brute-force")

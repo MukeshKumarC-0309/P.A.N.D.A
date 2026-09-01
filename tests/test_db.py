@@ -14,9 +14,10 @@ import pytest
 from panda import db as dao
 
 # Positional row matching the `cases` columns:
-# (case_id, created_at, title, severity, confidence, status, source_ip, summary)
+# (case_id, created_at, title, severity, confidence, status, source_ip, summary,
+#  disposition)
 ROW = (1, "2026-01-01T00:00:00+00:00", "SSH brute-force", "high", "high",
-       "open", "10.0.0.9", "Same IP on the honeypot and the Windows log.")
+       "open", "10.0.0.9", "Same IP on the honeypot and the Windows log.", None)
 
 
 def test_insert_and_fetch_all(db):
