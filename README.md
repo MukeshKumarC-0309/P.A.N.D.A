@@ -190,3 +190,7 @@ behavior end to end.
 See [DECISIONS.md](DECISIONS.md) for the reasoning behind the security choices,
 the case-store mapping, the de-dup principle, the offline-core / opt-in-extras
 split, and the honest model caveat on the severity tree.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
