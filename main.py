@@ -19,24 +19,30 @@ from panda import router, db, bridge
 # Command handlers. Each takes the raw query string (some ignore it).
 # ---------------------------------------------------------------------------
 
-def open_vault():
-    """Prompt for the vault password up to 3 times; open it on success.
+def _password_not_set():
+    """The shared 'no password yet' notice, printed before prompting to set one."""
+    print("P.A.N.D.A : Password hasn't been set yet.")
+    print('P.A.N.D.A : Please set the password now.')
 
-    Raises FileNotFoundError (from check_password) if no password has
-    been set yet, so the caller can prompt the user to set one.
+
+def _in_unlocked_vault(action):
+    """Authenticate (up to 3 tries), unlock the vault, run action(), re-lock.
+
+    The one auth+unlock+lock primitive, shared by every command that needs an
+    unlocked vault (VAULT / TDR / CASES). The vault is re-encrypted in a
+    `finally`, so a normal return or an error inside action() still saves.
+    Raises FileNotFoundError (from check_password) when no password is set yet,
+    so the caller can prompt the user to set one.
     """
     n = 0
     while n < 3:
         p = input("P.A.N.D.A : Enter your password - ")
         if check_password(p):
-            print("-" * 60)
-            print('PANDA VAULT')
-            print('-' * 60)
-            db.unlock(p)          # decrypt the vault into memory
+            db.unlock(p)
             try:
-                DATABASE()
+                action()
             finally:
-                db.lock(p)        # re-encrypt on exit, even if DATABASE() errors
+                db.lock(p)        # re-encrypt on exit, even if action() errors
             return
         print("P.A.N.D.A : Incorrect Password.")
         print("P.A.N.D.A : Try Again")
@@ -45,14 +51,21 @@ def open_vault():
     print("P.A.N.D.A : You do not have access to the vault.")
 
 
+def _open_vault_session():
+    """The VAULT command's action: print the banner, then run the record shell."""
+    print("-" * 60)
+    print('PANDA VAULT')
+    print('-' * 60)
+    DATABASE()
+
+
 def handle_vault(query):
     try:
-        open_vault()
+        _in_unlocked_vault(_open_vault_session)
     except FileNotFoundError:
-        print("P.A.N.D.A : Password hasn't been set yet.")
-        print('P.A.N.D.A : Please set the password now.')
+        _password_not_set()
         password()
-        open_vault()
+        _in_unlocked_vault(_open_vault_session)
 
 
 def handle_change(query):
@@ -67,35 +80,8 @@ def handle_change(query):
         else:
             print("P.A.N.D.A : Error, invalid input.")
     except FileNotFoundError:
-        print("P.A.N.D.A : Password hasn't been set yet.")
-        print('P.A.N.D.A : Please set the password now.')
+        _password_not_set()
         password()
-
-
-def _in_unlocked_vault(action):
-    """Authenticate (up to 3 tries), unlock the vault, run action(), re-lock.
-
-    Shared by the `tdr` (scan+persist) and `cases` (browse) commands — both
-    need an unlocked vault. The vault is re-encrypted in a `finally`, so a
-    normal return or an error inside action() still saves. Raises
-    FileNotFoundError (from check_password) when no password is set yet, so the
-    caller can prompt the user to set one.
-    """
-    n = 0
-    while n < 3:
-        p = input("P.A.N.D.A : Enter your password - ")
-        if check_password(p):
-            db.unlock(p)
-            try:
-                action()
-            finally:
-                db.lock(p)
-            return
-        print("P.A.N.D.A : Incorrect Password.")
-        print("P.A.N.D.A : Try Again")
-        n += 1
-    print("P.A.N.D.A : ACCESS DENIED")
-    print("P.A.N.D.A : You do not have access to the vault.")
 
 
 def _print_scan_summary(s):
@@ -133,8 +119,7 @@ def handle_tdr(query):
     try:
         _in_unlocked_vault(lambda: _print_scan_summary(bridge.scan_and_persist(live=live)))
     except FileNotFoundError:
-        print("P.A.N.D.A : Password hasn't been set yet.")
-        print("P.A.N.D.A : Please set the password now.")
+        _password_not_set()
         password()
 
 
@@ -143,8 +128,7 @@ def handle_cases(query):
     try:
         _in_unlocked_vault(browse_cases)
     except FileNotFoundError:
-        print("P.A.N.D.A : Password hasn't been set yet.")
-        print("P.A.N.D.A : Please set the password now.")
+        _password_not_set()
         password()
 
 
