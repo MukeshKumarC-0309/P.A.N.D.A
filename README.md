@@ -32,11 +32,14 @@ flowchart TD
     end
 
     SRC --> ENG
+    SRC --> ANOM[Unsupervised anomaly layer - advisory, low-confidence]
     ENG --> BR[bridge - de-dup and persist]
+    ANOM --> BR
     BR --> DB[(Encrypted vault - cases, detections, reports)]
     DB --> BROWSE[CASES browse - severity filter, related-by-IP]
     DB --> REP[Incident reports - technical + plain]
     REP -. optional guarded ai polish .-> LLM[LLM rewrite]
+    BROWSE -. analyst verdict .-> DB
 ```
 
 ## Quickstart
@@ -59,8 +62,9 @@ At the prompt:
 `TDR` runs on the offline snapshot by default; `TDR LIVE` pulls from Splunk when
 the `[live]` extra is installed and configured (else it says so and falls back
 to the snapshot). `TDR FRESH` clears previously stored cases first, so a re-run
-rebuilds the evidence store instead of appending. To scan a different capture
-(e.g. a larger real dataset exported to JSON), set `PANDA_SNAPSHOT=/path/to.json`.
+rebuilds the evidence store instead of appending. `TDR ANOMALY` runs the
+unsupervised anomaly layer (advisory). To scan a different capture (e.g. a larger
+real dataset exported to JSON), set `PANDA_SNAPSHOT=/path/to.json`.
 
 ## Example run
 
@@ -118,6 +122,15 @@ persists each finding as a case with detections and reports:
 - **Cross-source correlation** (pandas) — joins the Cowrie SSH honeypot against
   Windows failed logons on source IP (and a username fallback), grades severity,
   and renders an analyst alert card.
+- **Unsupervised anomaly layer** (`TDR ANOMALY`, scikit-learn) — ranks source
+  IPs by how far their behavior deviates from the population baseline over
+  engineered features (attempt tempo, account breadth/depth, cross-surface
+  presence). It's **advisory**: outliers persist as clearly-labeled
+  *low-confidence* cases, never as authoritative severity. Being unsupervised it
+  needs no labels, but it only means something with **volume** — below a
+  minimum number of distinct sources it honestly reports "insufficient data"
+  rather than inventing outliers (so it stays quiet on the tiny demo snapshot
+  and comes alive on a real capture).
 
 Severity is a **fixed, auditable policy**, encoded as a shallow decision tree
 (scikit-learn) for a readable rule path — *not* a model learned from real attack
@@ -139,6 +152,15 @@ python -m panda_tdr.severity_experiment
 The claim is deliberately narrow: it shows sound methodology (train/test
 discipline, class imbalance, interpretability) on synthetic data — **not**
 real-world detection accuracy, which would need real labeled incidents.
+
+**Human-in-the-loop (where this is going).** The pieces compose into an honest
+learning loop: the **anomaly layer surfaces** unusual sources without labels →
+they become browsable cases → an analyst records a **verdict** (`disposition`)
+→ those verdicts are the independent ground truth a future *supervised* model
+would train on (with a temporal split), turning "unusual" into "unusual **and**
+historically malicious." The blocker to real ML here is labels, not data
+volume; this is the architecture that earns them. The deterministic engine
+stays authoritative throughout — ML is advisory triage, never the verdict.
 
 ### One incident, one case — linked by source IP
 

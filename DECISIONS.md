@@ -187,6 +187,43 @@ Two things, kept apart on purpose:
   real labeled incidents, which don't exist here. The experiment never touches
   the production path.
 
+## Unsupervised anomaly layer (advisory)
+
+An unsupervised layer (`panda_tdr/anomaly.py`, IsolationForest) ranks source
+IPs by deviation from the population baseline over engineered features (attempt
+tempo, account breadth/depth, successes, host spread, honeypot presence). It's
+an early-warning / triage second opinion, added on top of the deterministic
+engine — never replacing it.
+
+- **Additive and advisory, by construction.** Outliers persist as
+  clearly-labeled cases with `rule="anomaly"`, `source="anomaly"`,
+  `confidence="low"`, and **no graded severity** — the analyst grades them via
+  the verdict. Rule-based cases are untouched and stay authoritative, so the
+  anomaly score can never masquerade as a confirmed finding. This preserves the
+  project's deterministic-truth thesis.
+- **No labels, but needs volume.** Unsupervised, so it sidesteps the label
+  problem for *surfacing* candidates — but it's only meaningful with many
+  distinct sources. Below `MIN_SOURCES` it reports `insufficient` and persists
+  nothing (as on the 1-source demo snapshot), instead of inventing outliers.
+  The value shows on a larger real capture. The intelligence is in the
+  engineered features, not the algorithm.
+- **Why it exists / honesty.** It uses the multivariate weak signal a single
+  threshold ignores — "unusual," explicitly **not** "malicious." Evaluating it
+  properly still needs labels, which is exactly why it feeds the loop below.
+
+## Human-in-the-loop learning (the ML direction)
+
+The honest path to real ML here is a feedback loop, and the pieces now compose
+into one: **anomaly layer surfaces** (no labels) → candidate becomes a case →
+analyst records a **`disposition`** verdict (independent ground truth) → those
+labels train a future *supervised* model with a temporal split. The blocker was
+never data volume — it's independent labels; this architecture accumulates them.
+The current severity scorer stays a deterministic policy; the synthetic
+`severity_experiment.py` demonstrates the ML *methodology* honestly in the
+meantime. Known trap to design around later: the surfacer only shows what it
+catches, so labeling must also sample normal traffic or the model inherits its
+blind spots.
+
 ## `[ai]` extra — LLM-polished reports (Step 3, opt-in)
 
 crewai + Gemini polish report **wording only**; the deterministic card
