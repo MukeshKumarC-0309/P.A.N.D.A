@@ -49,6 +49,13 @@ def test_search_returns_matching_rows(db, monkeypatch, capsys):
     assert "Findme" in out                                  # the matched row printed
 
 
+def test_add_records_handles_non_numeric_field_count(db, monkeypatch, capsys):
+    # A non-number for "how many fields" must not crash the shell.
+    _run(["CREATOR", "ADD", "mytable", "notanumber", "QUIT", "QUIT"], monkeypatch)
+    out = capsys.readouterr().out
+    assert "whole number" in out                          # friendly message, no traceback
+
+
 def test_show_rejects_bad_identifier_in_creator_view(db, monkeypatch, capsys):
     # CREATOR -> VIEW -> NO -> SHOW(user table) with an invalid name.
     _run(["CREATOR", "VIEW", "NO", "bad name", "QUIT", "QUIT"], monkeypatch)

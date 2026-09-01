@@ -76,7 +76,7 @@ def handle_change(query):
             db.unlock(p)                 # load the vault with the current key
             new_password = password()    # sets the new hash, returns the raw pw
             db.lock(new_password)        # re-encrypt the vault under the new key
-            print("P.A.N.D.A : Password updated succesfully.")
+            print("P.A.N.D.A : Password updated successfully.")
         else:
             print("P.A.N.D.A : Error, invalid input.")
     except FileNotFoundError:
@@ -154,7 +154,10 @@ def main():
         query = takecommand()
         if router.matches("quit", query):
             break
-        router.dispatch(query, fallback)
+        try:
+            router.dispatch(query, fallback)
+        except Exception:  # a bad command must not kill the whole session
+            print("P.A.N.D.A : Something went wrong with that command. Please try again.")
 
 
 if __name__ == "__main__":

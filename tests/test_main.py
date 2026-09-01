@@ -70,6 +70,21 @@ def test_no_password_set_prompts_to_set_one(clean_password, monkeypatch, capsys)
     assert calls == ["set"]
 
 
+def test_loop_survives_a_handler_error(monkeypatch, capsys):
+    # A handler blowing up must print a message and return to the prompt, not
+    # crash the whole session.
+    queries = iter(["boom", "quit"])
+    monkeypatch.setattr(main, "takecommand", lambda: next(queries))
+    monkeypatch.setattr(main, "banner", lambda: None)
+
+    def dispatch(query, fb):
+        raise RuntimeError("kaboom")
+    monkeypatch.setattr(main.router, "dispatch", dispatch)
+
+    main.main()  # reaches "quit" and returns despite the error on "boom"
+    assert "went wrong" in capsys.readouterr().out.lower()
+
+
 def test_tdr_passes_live_flag(clean_password, monkeypatch):
     _set_password()
     _mock_crypto(monkeypatch, [])

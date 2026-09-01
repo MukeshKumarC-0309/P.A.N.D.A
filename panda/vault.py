@@ -35,7 +35,7 @@ class VaultShell:
 
     @staticmethod
     def _error():
-        print("P.A.N.D.A : An unexpected error has occured")
+        print("P.A.N.D.A : An unexpected error has occurred")
         print("P.A.N.D.A : Please check the values again")
 
     @staticmethod
@@ -100,7 +100,12 @@ class VaultShell:
         table = self._prompt_identifier("Enter your table name : ", "table name")
         if table is None:
             return
-        field_count = int(input("How many fields are there ? "))
+        try:
+            field_count = int(input("How many fields are there ? "))
+        except ValueError:
+            print("P.A.N.D.A : Please enter a whole number.")
+            print()
+            return
         while True:
             if input("Do you want to add records ? ").upper() != "YES":
                 break
