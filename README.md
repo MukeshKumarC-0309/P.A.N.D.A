@@ -16,6 +16,29 @@ API key. Two opt-in extras add an LLM report polish (`[ai]`) and a live Splunk
 pull (`[live]`); with neither installed, PANDA is fully functional on the
 bundled offline snapshot.
 
+## Architecture
+
+```mermaid
+flowchart TD
+    C[Cowrie SSH honeypot]
+    W[Windows Security log - 4625 / 4624 / 4720]
+    C --> SRC
+    W --> SRC
+    SRC[Source: offline snapshot by default, or live Splunk pull with the live extra]
+
+    subgraph ENG [TDR detection engine]
+      DET[Windows detectors - brute-force, spray, account-creation, kill chain]
+      COR[Cross-source correlation + auditable severity policy]
+    end
+
+    SRC --> ENG
+    ENG --> BR[bridge - de-dup and persist]
+    BR --> DB[(Encrypted vault - cases, detections, reports)]
+    DB --> BROWSE[CASES browse - severity filter, related-by-IP]
+    DB --> REP[Incident reports - technical + plain]
+    REP -. optional guarded ai polish .-> LLM[LLM rewrite]
+```
+
 ## Quickstart
 
 ```bash
@@ -36,6 +59,50 @@ At the prompt:
 `TDR` runs on the offline snapshot by default; `TDR LIVE` pulls from Splunk when
 the `[live]` extra is installed and configured (else it says so and falls back
 to the snapshot).
+
+## Example run
+
+A scan over the bundled snapshot (real output). The engine finds a confirmed
+multi-stage intrusion, a separate brute-force, three account creations, and a
+cross-source correlation — de-duplicating what one incident already covers:
+
+```text
+YOU : tdr
+P.A.N.D.A : Enter your password - ****
+------------------------------------------------------------
+P.A.N.D.A TDR : scan complete
+------------------------------------------------------------
+ Source               : snapshot
+ Cases persisted      : 6
+   kill chains        : 1
+   brute/spray        : 1
+   account creations  : 3
+   correlations       : 1
+ Detections           : 8
+ Reports              : 3 — deterministic (AI extra not installed)
+ Skipped (subsumed by a chain) : 0 brute/spray, 1 account creation(s)
+------------------------------------------------------------
+P.A.N.D.A : Use the CASES command to browse them.
+```
+
+Opening the kill-chain case (`CASES` → case 1) shows its three stitched stages,
+and — the payoff of the de-dup design — links the *other* cases that share the
+attacker's IP, so one actor's separate lines of evidence connect without being
+merged:
+
+```text
+Related cases (same source IP 10.0.2.3):
++-----------+-----------------------------------------+------------+
+|   Case ID | Title                                   | Severity   |
++===========+=========================================+============+
+|         2 | Cross-source correlation: 10.0.2.3 (SSH | medium     |
+|           | honeypot + Windows)                     |            |
++-----------+-----------------------------------------+------------+
+|         3 | Brute-force from 10.0.2.3               | high       |
++-----------+-----------------------------------------+------------+
+```
+
+<!-- TODO (visibility): record a terminal GIF of `tdr` -> `cases` and embed it at the top of this section. -->
 
 ## How TDR works
 
@@ -184,6 +251,38 @@ data-access layer (CRUD + injection), auth and routing, the TDR detectors,
 correlation, both LLM-polish integrity guards (with injected fakes), the
 live-source availability logic, and the bridge's persist / de-dup / related-case
 behavior end to end.
+
+## Notes from the build
+
+<!-- TODO (your voice — a few honest sentences): why you built this, the honeypot
+     lab behind it, and what you set out to learn. This is the part reviewers
+     remember; keep it real, first-person, and specific to your experience. -->
+
+A few design calls I'd call out:
+
+- **Deterministic first, LLM optional.** The engine produces a correct,
+  fact-traceable report on its own; the LLM only ever rewords it, behind
+  integrity guards that ship the deterministic text if the rewrite drifts or the
+  call fails. The product is fully functional — and honest — with no API key.
+- **De-dup within a subsystem, never across sensors.** A standalone Windows
+  detection the kill chain already contains is dropped; but a cross-source
+  correlation is a *different claim from a different sensor*, so it is never
+  merged into the chain. Collapsing it would delete the cross-sensor signal —
+  the whole point of correlating. Shared IP links them instead.
+- **Honest severity, not fake ML.** Production severity is a fixed, auditable
+  policy; the ML angle lives in a clearly-separated synthetic benchmark that
+  reports held-out metrics and states plainly what synthetic data can't prove.
+
+**A bug the tests caught.** Before refactoring the interactive shell into a
+class, I wrote *characterization tests* to pin its current behavior. They
+immediately surfaced a latent crash — column-wrapping tripped `tabulate` on an
+empty table, so browsing a fresh vault would have thrown. I fixed it under the
+net, then did the refactor knowing behavior was locked. Writing the tests first
+paid for itself before the refactor even started.
+
+<!-- TODO (your voice): what you learned, and what's next — e.g. running the
+     [live] pull against a larger honeypot capture, or gathering real labeled
+     incidents so the severity model can be evaluated for real. -->
 
 ## Design record
 
