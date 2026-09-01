@@ -21,6 +21,18 @@ def test_default_source_is_snapshot(db):
     assert s["source"] == "snapshot"
 
 
+def test_fresh_rebuilds_instead_of_appending(db):
+    first = bridge.scan_and_persist()
+    assert len(cases.list_cases()) == first["cases"]
+    # Default appends: a second run doubles the store.
+    bridge.scan_and_persist()
+    assert len(cases.list_cases()) == first["cases"] * 2
+    # fresh clears first, so the store matches a single run again.
+    third = bridge.scan_and_persist(fresh=True)
+    assert third["fresh"] is True
+    assert len(cases.list_cases()) == first["cases"]
+
+
 def test_live_requested_but_unavailable_falls_back(db, monkeypatch):
     # No SDK / no creds -> live degrades to the snapshot, same findings, no crash.
     monkeypatch.setattr(bridge.live_source, "live_available", lambda: False)

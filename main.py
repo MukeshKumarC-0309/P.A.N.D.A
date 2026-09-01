@@ -13,6 +13,7 @@ from panda.auth import password, check_password
 from panda.vault import DATABASE
 from panda.browse import browse_cases
 from panda import router, db, bridge
+import config
 
 
 # ---------------------------------------------------------------------------
@@ -89,6 +90,8 @@ def _print_scan_summary(s):
     print("-" * 60)
     print("P.A.N.D.A TDR : scan complete")
     print("-" * 60)
+    if s["fresh"]:
+        print(" (fresh scan — cleared previously stored cases)")
     print(f" Source               : {s['source']}")
     print(f" Cases persisted      : {s['cases']}")
     print(f"   kill chains        : {s['chains']}")
@@ -113,11 +116,15 @@ def handle_tdr(query):
     """Run the TDR engine and persist findings.
 
     Offline snapshot by default; `tdr live` pulls from Splunk when the [live]
-    extra is installed and configured, else degrades to the snapshot.
+    extra is installed and configured, else degrades to the snapshot. `tdr fresh`
+    clears previously stored cases first (rebuild, not append). Set PANDA_SNAPSHOT
+    to point a scan at a different capture (e.g. a larger real dataset).
     """
     live = router.matches("live", query)
+    fresh = router.matches("fresh", query)
     try:
-        _in_unlocked_vault(lambda: _print_scan_summary(bridge.scan_and_persist(live=live)))
+        _in_unlocked_vault(lambda: _print_scan_summary(bridge.scan_and_persist(
+            snapshot_path=config.SNAPSHOT_PATH, live=live, fresh=fresh)))
     except FileNotFoundError:
         _password_not_set()
         password()

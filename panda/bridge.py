@@ -207,7 +207,7 @@ def _persist_correlation(inp, clf, summary, card_polisher):
 
 
 def scan_and_persist(snapshot_path=None, card_polisher=None, section_polisher=None,
-                     live=False):
+                     live=False, fresh=False):
     """Run the detectors + correlation over the telemetry and persist as cases.
 
     Returns a summary dict of what was written (and what was skipped as subsumed
@@ -225,6 +225,10 @@ def scan_and_persist(snapshot_path=None, card_polisher=None, section_polisher=No
     crewai is installed AND a Gemini key is set — so the default run is fully
     deterministic and offline. Tests inject fakes directly. `polished` /
     `polish_fallbacks` in the summary aggregate both paths (card + sections).
+
+    fresh=True clears the stored cases/detections/reports before persisting, so
+    a re-run (over the same or a larger dataset) rebuilds the evidence store
+    instead of appending to it.
     """
     if card_polisher is None:
         card_polisher = polish.make_card_polisher()
@@ -263,8 +267,11 @@ def scan_and_persist(snapshot_path=None, card_polisher=None, section_polisher=No
         "skipped_brute_spray": 0, "skipped_account_creations": 0,
         "cases": 0, "detections": 0, "reports": 0,
         "ai_polish": (card_polisher is not None) or (section_polisher is not None),
-        "polished": 0, "polish_fallbacks": 0, "source": source,
+        "polished": 0, "polish_fallbacks": 0, "source": source, "fresh": fresh,
     }
+
+    if fresh:
+        cases.clear_all()   # rebuild the store from scratch instead of appending
 
     for chain in chains:
         _persist_chain(chain, summary, section_polisher)

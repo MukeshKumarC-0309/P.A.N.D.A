@@ -80,6 +80,16 @@ def test_related_by_source_ip_links_and_excludes_self(db):
     assert [r[0] for r in related] == [b]
 
 
+def test_clear_all_empties_the_case_store(db):
+    cid = cases.record_case(title="t", severity="high")
+    cases.record_detection(cid, rule="brute-force")
+    cases.record_report(cid, "technical", "body")
+    cases.clear_all()
+    assert cases.list_cases() == []
+    assert cases.get_detections(cid) == []
+    assert cases.get_reports(cid) == []
+
+
 def test_related_by_source_ip_null_ip_is_empty(db):
     # Account-creation cases carry no source_ip -> never spuriously "related".
     cases.record_case(title="acct", severity="high", source_ip=None)

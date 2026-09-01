@@ -98,6 +98,18 @@ def get_case(case_id):
     return rows[0] if rows else None
 
 
+def clear_all():
+    """Delete every stored case and its detections/reports.
+
+    Children first, so the foreign keys don't block the deletes. Used by a
+    `fresh` scan to rebuild the evidence store from scratch instead of appending
+    to it — handy when re-running over the same (or a new, larger) dataset.
+    """
+    for table in ("reports", "detections", "cases"):
+        db.cursor.execute("delete from {}".format(db.safe_identifier(table)))
+    db.connection.commit()
+
+
 def related_by_source_ip(source_ip, exclude_case_id=None):
     """Other cases that share a source IP — the link across detection lenses.
 

@@ -58,7 +58,9 @@ At the prompt:
 
 `TDR` runs on the offline snapshot by default; `TDR LIVE` pulls from Splunk when
 the `[live]` extra is installed and configured (else it says so and falls back
-to the snapshot).
+to the snapshot). `TDR FRESH` clears previously stored cases first, so a re-run
+rebuilds the evidence store instead of appending. To scan a different capture
+(e.g. a larger real dataset exported to JSON), set `PANDA_SNAPSHOT=/path/to.json`.
 
 ## Example run
 

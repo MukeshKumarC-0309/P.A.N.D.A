@@ -94,6 +94,8 @@ def test_tdr_passes_live_flag(clean_password, monkeypatch):
     monkeypatch.setattr(main, "_print_scan_summary", lambda s: None)
     monkeypatch.setattr(builtins, "input", lambda *a, **k: "pw")
     main.handle_tdr("tdr")
-    assert seen.get("live") is False
+    assert seen.get("live") is False and seen.get("fresh") is False
     main.handle_tdr("run tdr live now")
     assert seen.get("live") is True
+    main.handle_tdr("tdr fresh")
+    assert seen.get("fresh") is True

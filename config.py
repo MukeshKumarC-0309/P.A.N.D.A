@@ -17,3 +17,7 @@ load_dotenv()  # reads .env into environment variables, if present
 
 DEFAULT_DB_PATH = Path.home() / ".panda" / "vault.db"
 DB_PATH = Path(os.environ.get("PANDA_DB_PATH", DEFAULT_DB_PATH))
+
+# Optional: point a TDR scan at a different capture (e.g. a larger, real
+# honeypot dataset exported to JSON). Unset -> the bundled offline snapshot.
+SNAPSHOT_PATH = os.environ.get("PANDA_SNAPSHOT")
