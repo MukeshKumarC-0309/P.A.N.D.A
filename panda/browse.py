@@ -19,12 +19,23 @@ _DET_WIDTHS = [None] * 9 + [50]                                     # Evidence
 _RELATED_WIDTHS = [None, 44, None]                                  # Title
 
 
+def _grid(rows, headers, widths):
+    """tabulate a grid, wrapping wide columns — but only when there are rows.
+
+    tabulate raises on an empty row list when maxcolwidths is set, so an empty
+    table (no cases, or a case with no detections) omits the wrapping and just
+    renders the header. Keeps the browse view from crashing on an empty vault.
+    """
+    if not rows:
+        return tabulate(rows, headers=headers, tablefmt="grid")
+    return tabulate(rows, headers=headers, tablefmt="grid", maxcolwidths=widths)
+
+
 def browse_cases():
     """List cases (optionally filtered by severity), then drill into one."""
     sev = input("Filter by severity? ( low | medium | high | critical, blank = all ) : ").strip()
     header = ["Case ID", "Created", "Title", "Severity", "Confidence", "Status", "Source IP", "Summary"]
-    print(tabulate(cases.list_cases(sev or None), headers=header, tablefmt="grid",
-                   maxcolwidths=_CASES_WIDTHS))
+    print(_grid(cases.list_cases(sev or None), header, _CASES_WIDTHS))
     pick = input("Enter a Case ID to open ( blank to go back ) : ").strip()
     if not pick.isdigit():
         print()
@@ -38,8 +49,7 @@ def browse_cases():
     det_header = ["Detection ID", "Case ID", "Detected", "Rule", "Source",
                   "Severity", "Confidence", "Source IP", "Username", "Evidence"]
     print("\nDetections:")
-    print(tabulate(cases.get_detections(cid), headers=det_header, tablefmt="grid",
-                   maxcolwidths=_DET_WIDTHS))
+    print(_grid(cases.get_detections(cid), det_header, _DET_WIDTHS))
 
     # Other cases keyed on the same source IP — the same actor seen through a
     # different lens (e.g. a Windows kill chain and a cross-source correlation).
@@ -48,9 +58,8 @@ def browse_cases():
     related = cases.related_by_source_ip(source_ip, exclude_case_id=cid)
     if related:
         print("\nRelated cases (same source IP {}):".format(source_ip))
-        print(tabulate([(r[0], r[2], r[3]) for r in related],
-                       headers=["Case ID", "Title", "Severity"], tablefmt="grid",
-                       maxcolwidths=_RELATED_WIDTHS))
+        print(_grid([(r[0], r[2], r[3]) for r in related],
+                    ["Case ID", "Title", "Severity"], _RELATED_WIDTHS))
     reps = cases.get_reports(cid)
     print("\nReports:")
     print(tabulate([(r[0], r[2], r[3]) for r in reps],
