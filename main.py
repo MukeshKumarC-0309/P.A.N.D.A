@@ -128,7 +128,10 @@ def _print_anomaly_summary(s):
         for ip, score in s["candidates"]:
             print(f"   - {ip}  (score {score})")
         print("-" * 60)
-        print("P.A.N.D.A : Review them with CASES and mark a verdict.")
+        if s["persisted"]:
+            print("P.A.N.D.A : Review them with CASES and mark a verdict.")
+        else:
+            print("P.A.N.D.A : No outliers flagged — nothing stood out from the baseline.")
 
 
 def handle_tdr(query):

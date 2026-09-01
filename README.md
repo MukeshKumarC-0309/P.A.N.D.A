@@ -260,6 +260,7 @@ PANDA/
 │   ├── detections.py  windows_records.py  incident_report.py   # Windows detectors
 │   ├── correlation.py  cowrie_records.py                       # cross-source join
 │   ├── severity_model.py  alerting.py  reporter.py             # scoring + alert card
+│   ├── anomaly.py                                              # unsupervised anomaly layer (advisory)
 │   ├── severity_experiment.py                                  # synthetic ML methodology demo (not production)
 │   ├── snapshot.py                                             # offline source
 │   ├── polish.py  polish_guard.py  incident_polish.py  llm.py  crews/  # [ai]
