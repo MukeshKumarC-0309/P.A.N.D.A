@@ -9,7 +9,10 @@ on one hardened core:
   Data is unreadable at rest and never written to disk in the clear.
 - **TDR** (Threat Detection & Response) — a detection engine that turns
   honeypot + Windows Security telemetry into confidence-graded incident cases,
-  persisted into the vault as encrypted evidence.
+  persisted into the vault as encrypted evidence. I built the engine in a
+  companion repo,
+  [P.A.N.D.A_TDR](https://github.com/MukeshKumarC-0309/P.A.N.D.A_TDR), and
+  integrated it here (it lives under `panda_tdr/`).
 
 The whole thing runs **offline and deterministic by default** — no network, no
 API key. Two opt-in extras add an LLM report polish (`[ai]`) and a live Splunk
@@ -259,7 +262,7 @@ PANDA/
 │   ├── cases.py                       # case-store write/read API
 │   ├── browse.py                      # interactive case browse (shared)
 │   └── bridge.py                      # scan → detect + correlate → persist
-├── panda_tdr/             # the vendored TDR engine (stdlib core + optional layers)
+├── panda_tdr/             # my TDR detection engine, integrated here (stdlib core + optional layers)
 │   ├── detections.py  windows_records.py  incident_report.py   # Windows detectors
 │   ├── correlation.py  cowrie_records.py                       # cross-source join
 │   ├── severity_model.py  alerting.py  reporter.py             # scoring + alert card

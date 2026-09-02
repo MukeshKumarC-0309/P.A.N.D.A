@@ -15,11 +15,12 @@ end for where the deeper restructuring history lives.
   correlation + standalone detections → graded-confidence incident cases).
   The vault is its secure evidence store.
 
-TDR is **integrated into this repo**: the deterministic engine is vendored
-under `panda_tdr/`, and `panda/bridge.py` runs it and persists findings
+TDR is **integrated into this repo**: the deterministic engine — which I built
+in my companion repo, [P.A.N.D.A_TDR](https://github.com/MukeshKumarC-0309/P.A.N.D.A_TDR)
+— lives under `panda_tdr/`, and `panda/bridge.py` runs it and persists findings
 through the vault. The core is offline; two opt-in extras (`[ai]`, `[live]`)
-add an LLM report polish and a live Splunk pull. The vendored engine's own
-lineage lives in the separate TDR repo.
+add an LLM report polish and a live Splunk pull. The engine's own build history
+(tests, iterations) lives in that companion repo.
 
 ## Security decisions
 
@@ -101,7 +102,7 @@ encryption-at-rest and login gate as every other record.
 
 ## TDR bridge (Step 1 — offline, deterministic)
 
-The detection engine is vendored from the separate TDR repo into
+The detection engine — my companion TDR repo's code — is integrated into
 `panda_tdr/` (stdlib only: `detections.py`, `windows_records.py`,
 `incident_report.py`) with the offline `test_data/splunk_snapshot.json`
 fixture and a Windows-only `snapshot.py` loader. No pandas / scikit-learn
@@ -133,9 +134,9 @@ opt-in cuts, so the core stays offline and lightweight.
 
 ## Correlation cut (Step 2 — offline, cross-source)
 
-The cross-source correlation engine is vendored (`correlation.py` on
-pandas; `severity_model.py` / `alerting.py` / `reporter.py` on
-scikit-learn). It joins the Cowrie SSH-honeypot events against the Windows
+The cross-source correlation engine also comes from the companion TDR repo
+(`correlation.py` on pandas; `severity_model.py` / `alerting.py` /
+`reporter.py` on scikit-learn). It joins the Cowrie SSH-honeypot events against the Windows
 failed-logon telemetry, and `bridge.scan_and_persist` persists each
 correlated identity as a case + a `rule="correlation"` detection + one
 technical report (the deterministic analyst card).
@@ -145,7 +146,7 @@ technical report (the deterministic analyst card).
   (only crewai/Gemini `[ai]` and splunk `[live]` are opt-in network deps).
 - **No cowrie_detector dependency.** `correlation.py` duck-types the Cowrie
   side (src_ip / username / timestamp / eventid / message), so the offline
-  path needs no file parser. `cowrie_records.py` is vendored with its
+  path needs no file parser. `cowrie_records.py` is carried over with its
   `_time`/username mapping intact but its `CowrieRecord` import swapped for
   a local record type — so offline records are identical to the live path,
   with no external package. The real `cowrie_detector` (the file/live
