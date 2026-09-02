@@ -285,9 +285,17 @@ behavior end to end.
 
 ## Notes from the build
 
-<!-- TODO (your voice — a few honest sentences): why you built this, the honeypot
-     lab behind it, and what you set out to learn. This is the part reviewers
-     remember; keep it real, first-person, and specific to your experience. -->
+I built PANDA for two reasons. First, **alert fatigue**: L1 SOC analysts burn out
+triaging a flood of low-context alerts one at a time, so I wanted to explore the
+opposite approach — pulling related signals into a single, *prioritized* incident
+with enough context to act on, instead of N separate rows to click through.
+That's why the engine correlates across sources, de-duplicates findings into one
+case per incident, links cases that share an attacker, and grades confidence
+rather than shouting everything at the same volume. Second, I wanted to
+understand the **ground truth beneath the alerts** — how SSH brute-force attacks
+actually unfold, and how an L1 analyst works day to day — so I ran a Cowrie SSH
+honeypot alongside a Windows host feeding Splunk and built the detection and
+triage layer on top of what they captured.
 
 A few design calls I'd call out:
 
@@ -311,9 +319,16 @@ empty table, so browsing a fresh vault would have thrown. I fixed it under the
 net, then did the refactor knowing behavior was locked. Writing the tests first
 paid for itself before the refactor even started.
 
-<!-- TODO (your voice): what you learned, and what's next — e.g. running the
-     [live] pull against a larger honeypot capture, or gathering real labeled
-     incidents so the severity model can be evaluated for real. -->
+**What I learned.** What stuck with me most was that honesty beats hype: I kept
+the engine deterministic and auditable instead of dressing up a rule as ML, and
+built the honest learning-loop architecture (anomaly → analyst verdict → future
+supervised model) instead. I also learned to write tests *before* refactoring —
+mine caught two real bugs — and that a security tool has to stay consistent with
+its own claims (I found and removed a legacy arbitrary-SQL mode that quietly
+broke the "no user input in SQL" guarantee). **Next:** run the anomaly layer
+against a larger real capture, and collect analyst verdicts as ground truth so
+the severity model can eventually be trained and evaluated for real, with a
+temporal (not random) split.
 
 ## Design record
 
