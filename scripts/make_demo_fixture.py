@@ -3,7 +3,7 @@
 This is fabricated data (NOT a real capture). Its only purpose is to provide
 enough distinct source IPs, with varied behavior, for the unsupervised anomaly
 layer to model — so `tdr anomaly` demonstrates itself fully offline, without a
-lab. Real evaluation still needs a real capture (see README / RESULTS).
+lab. Real evaluation still needs a real capture (see the README).
 
 Deterministic: same output every run. Regenerate with:
     python scripts/make_demo_fixture.py
