@@ -63,6 +63,17 @@ def test_deviant_source_ranks_most_anomalous():
     assert res.candidates[0].is_outlier is True
 
 
+def test_demo_fixture_models_and_flags_outliers():
+    # The shipped synthetic demo fixture must give the anomaly layer enough
+    # distinct sources to model (so `tdr anomaly` demonstrates itself offline),
+    # with the loud brute/spray sources flagged as outliers.
+    from panda_tdr.snapshot import load_snapshot
+    res = anomaly.rank(load_snapshot("test_data/demo_multi_source.json"))
+    assert res.insufficient is False and res.n_sources >= anomaly.MIN_SOURCES
+    outliers = {c.src_ip for c in res.candidates if c.is_outlier}
+    assert {"10.0.0.50", "10.0.0.60"} <= outliers
+
+
 def test_rank_is_deterministic_and_respects_top_k():
     failed = []
     for i in range(12):

@@ -130,7 +130,10 @@ persists each finding as a case with detections and reports:
   needs no labels, but it only means something with **volume** — below a
   minimum number of distinct sources it honestly reports "insufficient data"
   rather than inventing outliers (so it stays quiet on the tiny demo snapshot
-  and comes alive on a real capture).
+  and comes alive on a real capture). A **synthetic multi-source fixture** is
+  bundled so you can see the layer work offline —
+  `PANDA_SNAPSHOT=test_data/demo_multi_source.json` then `TDR ANOMALY`
+  (clearly-labeled fabricated data; real evaluation still needs a real capture).
 
 Severity is a **fixed, auditable policy**, encoded as a shallow decision tree
 (scikit-learn) for a readable rule path — *not* a model learned from real attack
