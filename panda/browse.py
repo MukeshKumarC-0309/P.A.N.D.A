@@ -9,7 +9,7 @@ evidence is readable by construction only after login.
 """
 from tabulate import tabulate
 
-from panda import cases
+from panda import cases, system
 
 # Cap the free-text columns so long titles/summaries/evidence wrap instead of
 # blowing a case table past the terminal width. None = no cap; ints wrap. Lengths
@@ -19,18 +19,25 @@ _DET_WIDTHS = [None] * 9 + [50]                                     # Evidence
 _RELATED_WIDTHS = [None, 44, None]                                  # Title
 
 
-def _grid(rows, headers, widths):
+def _grid(rows, headers, widths, sev_col=None):
     """tabulate a grid, wrapping wide columns — but only when there are rows.
 
     tabulate raises on an empty row list when maxcolwidths is set, so an empty
     table (no cases, or a case with no detections) omits the wrapping and just
     renders the header. Keeps the browse view from crashing on an empty vault.
+    `sev_col`, when given, is the column index whose value is colored by
+    severity (tabulate strips ANSI for width, so alignment is unaffected).
     """
     if not rows:
         return tabulate(rows, headers=headers, tablefmt="grid")
-    # tabulate's column wrapper chokes on None cells (e.g. a NULL summary or
-    # disposition), so render them as empty strings first.
-    clean = [["" if cell is None else cell for cell in row] for row in rows]
+    clean = []
+    for row in rows:
+        # None cells break tabulate's wrapper -> render as empty strings; color
+        # the severity column by level.
+        cells = ["" if c is None else c for c in row]
+        if sev_col is not None:
+            cells[sev_col] = system.severity(cells[sev_col])
+        clean.append(cells)
     return tabulate(clean, headers=headers, tablefmt="grid", maxcolwidths=widths)
 
 
@@ -39,7 +46,7 @@ def browse_cases():
     sev = input("Filter by severity? ( low | medium | high | critical, blank = all ) : ").strip()
     header = ["Case ID", "Created", "Title", "Severity", "Confidence", "Status",
               "Source IP", "Summary", "Disposition"]
-    print(_grid(cases.list_cases(sev or None), header, _CASES_WIDTHS))
+    print(_grid(cases.list_cases(sev or None), header, _CASES_WIDTHS, sev_col=3))
     pick = input("Enter a Case ID to open ( blank to go back ) : ").strip()
     if not pick.isdigit():
         print()
@@ -53,7 +60,7 @@ def browse_cases():
     det_header = ["Detection ID", "Case ID", "Detected", "Rule", "Source",
                   "Severity", "Confidence", "Source IP", "Username", "Evidence"]
     print("\nDetections:")
-    print(_grid(cases.get_detections(cid), det_header, _DET_WIDTHS))
+    print(_grid(cases.get_detections(cid), det_header, _DET_WIDTHS, sev_col=5))
 
     # Other cases keyed on the same source IP — the same actor seen through a
     # different lens (e.g. a Windows kill chain and a cross-source correlation).
@@ -63,7 +70,7 @@ def browse_cases():
     if related:
         print("\nRelated cases (same source IP {}):".format(source_ip))
         print(_grid([(r[0], r[2], r[3]) for r in related],
-                    ["Case ID", "Title", "Severity"], _RELATED_WIDTHS))
+                    ["Case ID", "Title", "Severity"], _RELATED_WIDTHS, sev_col=2))
     reps = cases.get_reports(cid)
     print("\nReports:")
     print(tabulate([(r[0], r[2], r[3]) for r in reps],

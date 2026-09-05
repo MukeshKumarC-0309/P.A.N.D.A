@@ -13,7 +13,9 @@ import sys
 # ANSI SGR codes used below.
 _RESET = "\033[0m"
 BOLD, DIM = 1, 2
+RED, BRIGHT_RED = 31, 91
 GREEN, BRIGHT_GREEN = 32, 92
+YELLOW = 33
 CYAN, BRIGHT_CYAN = 36, 96
 
 
@@ -49,6 +51,24 @@ def _style(text, *codes):
     if not _COLOR or not codes:
         return text
     return "".join("\033[{}m".format(c) for c in codes) + text + _RESET
+
+
+# Public styling helper for the rest of the CLI (scan summaries, case tables).
+style = _style
+
+# Severity -> color. Unknown / None severities render plain.
+_SEV_CODES = {
+    "critical": (BOLD, BRIGHT_RED),
+    "high": (BRIGHT_RED,),
+    "medium": (YELLOW,),
+    "low": (DIM,),
+}
+
+
+def severity(value):
+    """Colorize a severity string by level (plain for unknown / None)."""
+    codes = _SEV_CODES.get((value or "").lower())
+    return _style(value, *codes) if (value and codes) else (value or "")
 
 
 def _version():

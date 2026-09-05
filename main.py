@@ -8,7 +8,7 @@ the PANDA TDR threat-detection engine. Routing is handled by
 panda/router.py: each command registers keywords and a handler(query);
 new capabilities (e.g. TDR commands) register without editing this loop.
 """
-from panda.system import help, banner, takecommand
+from panda.system import help, banner, takecommand, style, BOLD, DIM, BRIGHT_CYAN
 from panda.auth import password, check_password
 from panda.vault import DATABASE
 from panda.browse import browse_cases
@@ -87,13 +87,14 @@ def handle_change(query):
 
 def _print_scan_summary(s):
     """Print what a TDR scan wrote to the case store."""
-    print("-" * 60)
-    print("P.A.N.D.A TDR : scan complete")
-    print("-" * 60)
+    rule = style("-" * 60, DIM)
+    print(rule)
+    print(style("P.A.N.D.A TDR : scan complete", BOLD, BRIGHT_CYAN))
+    print(rule)
     if s["fresh"]:
-        print(" (fresh scan — cleared previously stored cases)")
+        print(style(" (fresh scan — cleared previously stored cases)", DIM))
     print(f" Source               : {s['source']}")
-    print(f" Cases persisted      : {s['cases']}")
+    print(f" Cases persisted      : {style(str(s['cases']), BOLD)}")
     print(f"   kill chains        : {s['chains']}")
     print(f"   brute/spray        : {s['brute_spray']}")
     print(f"   account creations  : {s['account_creations']}")
@@ -108,15 +109,16 @@ def _print_scan_summary(s):
     print(f" Skipped (subsumed by a chain) : "
           f"{s['skipped_brute_spray']} brute/spray, "
           f"{s['skipped_account_creations']} account creation(s)")
-    print("-" * 60)
+    print(rule)
     print("P.A.N.D.A : Use the CASES command to browse them.")
 
 
 def _print_anomaly_summary(s):
     """Print the result of an unsupervised anomaly scan."""
-    print("-" * 60)
-    print("P.A.N.D.A TDR : anomaly scan (advisory)")
-    print("-" * 60)
+    rule = style("-" * 60, DIM)
+    print(rule)
+    print(style("P.A.N.D.A TDR : anomaly scan (advisory)", BOLD, BRIGHT_CYAN))
+    print(rule)
     print(f" Source               : {s['source']}")
     if s["insufficient"]:
         print(f" Insufficient data    : {s['n_sources']} distinct source(s); "
@@ -127,7 +129,7 @@ def _print_anomaly_summary(s):
         print(f" Anomaly candidates   : {s['persisted']} (low-confidence cases)")
         for ip, score in s["candidates"]:
             print(f"   - {ip}  (score {score})")
-        print("-" * 60)
+        print(rule)
         if s["persisted"]:
             print("P.A.N.D.A : Review them with CASES and mark a verdict.")
         else:
