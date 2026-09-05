@@ -253,6 +253,13 @@ offline core.
   says "Reports: N — deterministic (AI extra not installed)" vs
   "LLM-polished (X polished, Y fell back)", so offline output is the
   expected state, not a silent degrade.
+- **Python-version constraint (`[ai]` only).** crewai's dependency chain (old
+  `langchain` → `numpy <2`) has no wheels for Python 3.13+, so the `[ai]` extra
+  installs only on Python ≤ 3.12; it won't build on 3.14. The core and `[live]`
+  run fine on newer Python — and because `ai_available()` gates on crewai
+  actually importing, a 3.14 box just runs deterministically (verified: the
+  fallback is the observed behavior there). The live Splunk pull (`[live]`) was
+  verified end-to-end against Splunk 10.4.1.
 
 ## `[live]` extra — live Splunk pull (Step 4, opt-in)
 

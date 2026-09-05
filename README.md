@@ -231,6 +231,11 @@ pip install -e '.[ai]'      # + set GEMINI_API_KEY
 pip install -e '.[live]'    # + set SPLUNK_USER / SPLUNK_PASSWORD / ...
 ```
 
+> **`[ai]` needs Python ≤ 3.12.** crewai's dependency chain (old `langchain` →
+> `numpy <2`) has no wheels for Python 3.13+, so install the `[ai]` extra in a
+> 3.11/3.12 environment. The core and `[live]` run fine on newer Python; without
+> `[ai]`, reports are simply the deterministic cards.
+
 ## Security design
 
 - **Password hashing — bcrypt** (`panda/auth.py`): salted, deliberately slow;
