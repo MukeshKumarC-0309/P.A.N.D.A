@@ -126,9 +126,9 @@ def _print_anomaly_summary(s):
         print(" Point at a larger capture (PANDA_SNAPSHOT) or run TDR LIVE.")
     else:
         print(f" Sources modeled      : {s['n_sources']}")
-        print(f" Anomaly candidates   : {s['persisted']} (low-confidence cases)")
+        print(f" Anomaly candidates   : {style(str(s['persisted']), BOLD)} (low-confidence cases)")
         for ip, score in s["candidates"]:
-            print(f"   - {ip}  (score {score})")
+            print("   - " + style(ip, BOLD) + style("  (score {})".format(score), DIM))
         print(rule)
         if s["persisted"]:
             print("P.A.N.D.A : Review them with CASES and mark a verdict.")

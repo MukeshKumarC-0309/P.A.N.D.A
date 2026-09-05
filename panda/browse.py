@@ -19,24 +19,24 @@ _DET_WIDTHS = [None] * 9 + [50]                                     # Evidence
 _RELATED_WIDTHS = [None, 44, None]                                  # Title
 
 
-def _grid(rows, headers, widths, sev_col=None):
+def _grid(rows, headers, widths, colorizers=None):
     """tabulate a grid, wrapping wide columns — but only when there are rows.
 
     tabulate raises on an empty row list when maxcolwidths is set, so an empty
     table (no cases, or a case with no detections) omits the wrapping and just
     renders the header. Keeps the browse view from crashing on an empty vault.
-    `sev_col`, when given, is the column index whose value is colored by
-    severity (tabulate strips ANSI for width, so alignment is unaffected).
+    `colorizers`, when given, maps a column index to a styling function (e.g.
+    severity/disposition color); tabulate strips ANSI for width, so alignment is
+    unaffected.
     """
     if not rows:
         return tabulate(rows, headers=headers, tablefmt="grid")
     clean = []
     for row in rows:
-        # None cells break tabulate's wrapper -> render as empty strings; color
-        # the severity column by level.
+        # None cells break tabulate's wrapper -> render as empty strings.
         cells = ["" if c is None else c for c in row]
-        if sev_col is not None:
-            cells[sev_col] = system.severity(cells[sev_col])
+        for idx, fn in (colorizers or {}).items():
+            cells[idx] = fn(cells[idx])
         clean.append(cells)
     return tabulate(clean, headers=headers, tablefmt="grid", maxcolwidths=widths)
 
@@ -46,7 +46,8 @@ def browse_cases():
     sev = input("Filter by severity? ( low | medium | high | critical, blank = all ) : ").strip()
     header = ["Case ID", "Created", "Title", "Severity", "Confidence", "Status",
               "Source IP", "Summary", "Disposition"]
-    print(_grid(cases.list_cases(sev or None), header, _CASES_WIDTHS, sev_col=3))
+    print(_grid(cases.list_cases(sev or None), header, _CASES_WIDTHS,
+                colorizers={3: system.severity, 8: system.disposition}))
     pick = input("Enter a Case ID to open ( blank to go back ) : ").strip()
     if not pick.isdigit():
         print()
@@ -59,8 +60,9 @@ def browse_cases():
         return
     det_header = ["Detection ID", "Case ID", "Detected", "Rule", "Source",
                   "Severity", "Confidence", "Source IP", "Username", "Evidence"]
-    print("\nDetections:")
-    print(_grid(cases.get_detections(cid), det_header, _DET_WIDTHS, sev_col=5))
+    print(system.style("\nDetections:", system.BOLD))
+    print(_grid(cases.get_detections(cid), det_header, _DET_WIDTHS,
+                colorizers={5: system.severity}))
 
     # Other cases keyed on the same source IP — the same actor seen through a
     # different lens (e.g. a Windows kill chain and a cross-source correlation).
@@ -68,11 +70,12 @@ def browse_cases():
     source_ip = case[6]
     related = cases.related_by_source_ip(source_ip, exclude_case_id=cid)
     if related:
-        print("\nRelated cases (same source IP {}):".format(source_ip))
+        print(system.style("\nRelated cases (same source IP {}):".format(source_ip), system.BOLD))
         print(_grid([(r[0], r[2], r[3]) for r in related],
-                    ["Case ID", "Title", "Severity"], _RELATED_WIDTHS, sev_col=2))
+                    ["Case ID", "Title", "Severity"], _RELATED_WIDTHS,
+                    colorizers={2: system.severity}))
     reps = cases.get_reports(cid)
-    print("\nReports:")
+    print(system.style("\nReports:", system.BOLD))
     print(tabulate([(r[0], r[2], r[3]) for r in reps],
                    headers=["Report ID", "Audience", "Created"], tablefmt="grid"))
     rpick = input("Enter a Report ID to open ( blank to skip ) : ").strip()
@@ -81,11 +84,13 @@ def browse_cases():
         if report is None:
             print("P.A.N.D.A : No such report.")
         else:
-            print("-" * 100)
-            print("Incident report (", report[2], ") - case", report[1])
-            print("-" * 100)
+            rule = system.style("-" * 100, system.DIM)
+            print(rule)
+            print(system.style("Incident report ({}) - case {}".format(report[2], report[1]),
+                               system.BOLD, system.BRIGHT_CYAN))
+            print(rule)
             print(report[4])  # body
-            print("-" * 100)
+            print(rule)
     _prompt_disposition(cid)
     print()
 
@@ -102,4 +107,5 @@ def _prompt_disposition(case_id):
     except ValueError:
         print("P.A.N.D.A : Unknown verdict — leaving the case unmarked.")
     else:
-        print("P.A.N.D.A : Recorded verdict '{}' on case {}.".format(verdict, case_id))
+        print("P.A.N.D.A : Recorded verdict '{}' on case {}.".format(
+            system.disposition(verdict), case_id))

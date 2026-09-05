@@ -71,6 +71,20 @@ def severity(value):
     return _style(value, *codes) if (value and codes) else (value or "")
 
 
+# Analyst verdict -> color.
+_DISP_CODES = {
+    "confirmed": (BRIGHT_RED,),      # a verified real threat
+    "false_positive": (DIM,),        # dismissed
+    "benign": (GREEN,),              # reviewed, harmless
+}
+
+
+def disposition(value):
+    """Colorize an analyst verdict (plain for unknown / None / unreviewed)."""
+    codes = _DISP_CODES.get((value or "").lower())
+    return _style(value, *codes) if (value and codes) else (value or "")
+
+
 def _version():
     try:
         from importlib.metadata import version
