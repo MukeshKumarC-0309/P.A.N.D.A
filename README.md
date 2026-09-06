@@ -253,6 +253,37 @@ pip install -e '.[live]'    # + set SPLUNK_USER / SPLUNK_PASSWORD / ...
 - **Offline core, no secrets.** Embedded `sqlite3`, one local file per device.
   The only network paths are the opt-in extras.
 
+## Threat model
+
+Being explicit about what PANDA does and does **not** protect — a security tool
+should state its own limits.
+
+**Defends against:**
+- **Data theft at rest.** The vault on disk is only ciphertext (scrypt-derived
+  key + authenticated Fernet). Without the password it is unreadable, and a
+  wrong password or a tampered file is detected, not silently accepted.
+- **Offline password attacks.** Passwords are bcrypt hashes (per-password salt,
+  deliberately slow) — no fast/unsalted hash, no plaintext.
+- **SQL injection.** Every query binds values as parameters and validates
+  identifiers against a whitelist; there is no raw-SQL-on-user-input path.
+- **Accidental plaintext on disk.** The decrypted database lives only in memory
+  during a session; on exit it is re-encrypted.
+
+**Explicitly does *not* defend against (out of scope):**
+- **A compromised host** — malware, a keylogger, or a screen-scraper capturing
+  the password as you type, or reading the decrypted database out of process
+  memory while the vault is **unlocked**.
+- **An attacker who already knows the vault password** (it is the only factor —
+  no MFA).
+- **Physical access to an unlocked session.**
+- It is **not** an HSM, **not** multi-user, and has no key rotation beyond a
+  password change (which re-encrypts). The TDR side **analyzes telemetry you
+  give it** — it does not itself harden or monitor the host it runs on.
+
+These boundaries are deliberate for a local-first, single-user tool; widening
+them (MFA, envelope encryption, memory hardening) would be the next security
+iteration.
+
 ## Layout
 
 ```
