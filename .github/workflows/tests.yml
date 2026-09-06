@@ -15,5 +15,5 @@ jobs:
           python-version: "3.12"
       - name: Install (core + dev, offline extras excluded)
         run: pip install -e '.[dev]'
-      - name: Run the test suite
-        run: pytest -q
+      - name: Run the test suite with coverage
+        run: pytest -q --cov=panda --cov=panda_tdr --cov=main --cov=config --cov-report=term-missing --cov-fail-under=75

@@ -1,6 +1,7 @@
 # P.A.N.D.A
 
 [![tests](https://github.com/MukeshKumarC-0309/P.A.N.D.A/actions/workflows/tests.yml/badge.svg)](https://github.com/MukeshKumarC-0309/P.A.N.D.A/actions/workflows/tests.yml)
+![coverage](https://img.shields.io/badge/coverage-78%25-green)
 
 A local-first **security platform** in Python. One product, two capabilities
 on one hardened core:
@@ -293,6 +294,10 @@ data-access layer (CRUD + injection), auth and routing, the TDR detectors,
 correlation, both LLM-polish integrity guards (with injected fakes), the
 live-source availability logic, and the bridge's persist / de-dup / related-case
 behavior end to end.
+
+Coverage runs in CI (`pytest --cov`) with a **75% floor** enforced on every push
+(currently ~78%; the uncovered remainder is the `[live]`/`[ai]` adapters that
+require Splunk or crewai to exercise).
 
 ## Notes from the build
 

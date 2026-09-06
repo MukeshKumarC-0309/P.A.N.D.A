@@ -23,7 +23,7 @@ dependencies = [
 [project.optional-dependencies]
 ai = ["crewai"]         # LLM-polished reports; also set GEMINI_API_KEY
 live = ["splunk-sdk"]   # live Splunk pull; also set SPLUNK_* with Splunk reachable
-dev = ["pytest"]        # test suite
+dev = ["pytest", "pytest-cov"]   # test suite + coverage
 
 [project.scripts]
 panda = "main:main"
@@ -31,3 +31,7 @@ panda = "main:main"
 [tool.setuptools]
 packages = ["panda", "panda_tdr", "panda_tdr.crews"]
 py-modules = ["config", "main"]
+
+[tool.coverage.run]
+source = ["panda", "panda_tdr", "main", "config"]
+omit = ["tests/*"]
