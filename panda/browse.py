@@ -46,7 +46,10 @@ def browse_cases():
     sev = input("Filter by severity? ( low | medium | high | critical, blank = all ) : ").strip()
     header = ["Case ID", "Created", "Title", "Severity", "Confidence", "Status",
               "Source IP", "Summary", "Disposition"]
-    print(_grid(cases.list_cases(sev or None), header, _CASES_WIDTHS,
+    # Rows carry an internal `fingerprint` last column (for idempotency) that the
+    # header doesn't list — slice it off so the display columns line up.
+    rows = [r[:len(header)] for r in cases.list_cases(sev or None)]
+    print(_grid(rows, header, _CASES_WIDTHS,
                 colorizers={3: system.severity, 8: system.disposition}))
     pick = input("Enter a Case ID to open ( blank to go back ) : ").strip()
     if not pick.isdigit():

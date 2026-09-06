@@ -90,6 +90,13 @@ def test_set_disposition_records_and_validates(db):
         cases.set_disposition(cid, "totally_made_up")
 
 
+def test_case_exists_by_fingerprint(db):
+    assert cases.case_exists("fp-1") is False
+    cases.record_case(title="t", fingerprint="fp-1")
+    assert cases.case_exists("fp-1") is True
+    assert cases.case_exists(None) is False          # null never matches
+
+
 def test_clear_all_empties_the_case_store(db):
     cid = cases.record_case(title="t", severity="high")
     cases.record_detection(cid, rule="brute-force")

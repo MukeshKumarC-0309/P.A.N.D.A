@@ -28,8 +28,12 @@ def _now():
 # --- write API (used by a TDR run) -----------------------------------------
 
 def record_case(title, severity=None, confidence=None, source_ip=None,
-                summary=None, status="open"):
-    """Create a case; return its new case_id."""
+                summary=None, status="open", fingerprint=None):
+    """Create a case; return its new case_id.
+
+    `fingerprint` is a stable id of the underlying finding (see
+    case_exists) — set it so a re-scan can skip a finding already recorded.
+    """
     return db.insert_row("cases", {
         "created_at": _now(),
         "title": title,
@@ -38,7 +42,19 @@ def record_case(title, severity=None, confidence=None, source_ip=None,
         "status": status,
         "source_ip": source_ip,
         "summary": summary,
+        "fingerprint": fingerprint,
     })
+
+
+def case_exists(fingerprint):
+    """True if a case with this fingerprint is already stored.
+
+    The basis for idempotent re-scans: a finding whose fingerprint is already
+    present is skipped instead of appended. A null fingerprint never matches.
+    """
+    if not fingerprint:
+        return False
+    return bool(db.fetch_where("cases", "fingerprint", fingerprint))
 
 
 def record_detection(case_id, rule, source=None, severity=None, confidence=None,

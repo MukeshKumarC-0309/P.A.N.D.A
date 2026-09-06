@@ -57,18 +57,24 @@ def test_scan_anomalies_persists_outliers_as_low_confidence_cases(db, monkeypatc
     dets = cases.get_detections(c[0])
     assert dets and dets[0][3] == "anomaly"              # rule
     assert cases.get_reports(c[0]) == []                 # anomaly candidates carry no report
+    # Re-running is idempotent: same candidates skipped, not duplicated.
+    again = bridge.scan_anomalies()
+    assert again["persisted"] == 0 and again["skipped_duplicate"] == s["persisted"]
 
 
-def test_fresh_rebuilds_instead_of_appending(db):
+def test_rescan_is_idempotent_and_fresh_rebuilds(db):
     first = bridge.scan_and_persist()
-    assert len(cases.list_cases()) == first["cases"]
-    # Default appends: a second run doubles the store.
-    bridge.scan_and_persist()
-    assert len(cases.list_cases()) == first["cases"] * 2
-    # fresh clears first, so the store matches a single run again.
+    n = first["cases"]
+    assert len(cases.list_cases()) == n
+    # Re-scanning the same data adds nothing — every finding is already recorded
+    # (matched by fingerprint) and skipped, not duplicated.
+    again = bridge.scan_and_persist()
+    assert again["cases"] == 0 and again["skipped_duplicate"] == n
+    assert len(cases.list_cases()) == n
+    # fresh clears first, so it rebuilds to the same count (not doubled).
     third = bridge.scan_and_persist(fresh=True)
-    assert third["fresh"] is True
-    assert len(cases.list_cases()) == first["cases"]
+    assert third["fresh"] is True and third["cases"] == n
+    assert len(cases.list_cases()) == n
 
 
 def test_live_requested_but_unavailable_falls_back(db, monkeypatch):

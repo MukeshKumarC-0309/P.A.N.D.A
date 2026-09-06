@@ -109,6 +109,8 @@ def _print_scan_summary(s):
     print(f" Skipped (subsumed by a chain) : "
           f"{s['skipped_brute_spray']} brute/spray, "
           f"{s['skipped_account_creations']} account creation(s)")
+    if s["skipped_duplicate"]:
+        print(f" Skipped (already recorded)    : {s['skipped_duplicate']}")
     print(rule)
     print("P.A.N.D.A : Use the CASES command to browse them.")
 

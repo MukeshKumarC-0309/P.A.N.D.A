@@ -51,6 +51,10 @@ def _persist_chain(chain, summary, section_polisher):
     polished (section_polisher, the [ai] extra) with a per-section fact guard;
     the plain report is always deterministic (never LLM-touched).
     """
+    fp = f"chain|{chain.src_ip}|{chain.account}|{chain.host}|{chain.first_failure}|{chain.success_time}"
+    if cases.case_exists(fp):
+        summary["skipped_duplicate"] += 1
+        return
     has_persist = bool(chain.created_accounts)
     persist_note = (
         f" and created {', '.join(chain.created_accounts)} on the host"
@@ -61,6 +65,7 @@ def _persist_chain(chain, summary, section_polisher):
         severity=chain.severity, confidence="high", source_ip=chain.src_ip,
         summary=(f"{chain.failure_count} failed logons from {chain.src_ip} preceded a "
                  f"successful logon as '{chain.account}' on {chain.host}{persist_note}."),
+        fingerprint=fp,
     )
 
     # Stage 1 — brute-force precursor.
@@ -109,10 +114,14 @@ def _persist_standalone(det, summary):
     rule = _STANDALONE_RULE[det.detection_type]
     severity = assess_severity(det)
     label = "Brute-force" if det.detection_type == "brute_force" else "Password spray"
+    fp = f"{det.detection_type}|{det.src_ip}|{det.rollup.worst_account}"
+    if cases.case_exists(fp):
+        summary["skipped_duplicate"] += 1
+        return
     case_id = cases.record_case(
         title=f"{label} from {det.src_ip}",
         severity=severity, confidence="high", source_ip=det.src_ip,
-        summary=det.reason,
+        summary=det.reason, fingerprint=fp,
     )
     cases.record_detection(
         case_id, rule=rule, source="windows",
@@ -133,11 +142,15 @@ def _persist_account_creation(ac, summary):
     system/built-in filter, but a legitimate admin creating an account trips
     the same rule, so this is the weakest of the standalone signals.
     """
+    fp = f"acct|{ac.new_account}|{ac.host}|{ac.timestamp}"
+    if cases.case_exists(fp):
+        summary["skipped_duplicate"] += 1
+        return
     summary_line = f"'{ac.creator}' created account '{ac.new_account}' on {ac.host}."
     case_id = cases.record_case(
         title=f"Account creation: {ac.new_account} on {ac.host}",
         severity=ac.severity, confidence="medium", source_ip=None,
-        summary=summary_line,
+        summary=summary_line, fingerprint=fp,
     )
     cases.record_detection(
         case_id, rule="account-creation", source="windows",
@@ -163,14 +176,20 @@ def _persist_correlation(inp, clf, summary, card_polisher):
     wording but ships the deterministic card if the polish drifts or the call
     fails — so the stored report is never less truthful than the card.
     """
+    is_fallback = inp.get("match_type") == "username"
+    delta = inp["min_time_delta_seconds"]
+    key = inp["norm_username"] if is_fallback else inp["src_ip"]
+    fp = f"corr|{'user' if is_fallback else 'ip'}|{key}|{inp['cowrie_time']}|{inp['windows_time']}"
+    if cases.case_exists(fp):
+        summary["skipped_duplicate"] += 1
+        return
+
     alert = build_alert(inp, clf)          # {severity, narrative, recommended_action}
     card = render_alert(inp, clf)          # the deterministic analyst card
     body = card
     if card_polisher is not None:
         body, reason = guarded_polish(card, alert["severity"], card_polisher)
         summary["polish_fallbacks" if reason else "polished"] += 1
-    is_fallback = inp.get("match_type") == "username"
-    delta = inp["min_time_delta_seconds"]
 
     if is_fallback:
         title = f"Cross-source correlation: account '{inp['norm_username']}' across IPs"
@@ -191,7 +210,7 @@ def _persist_correlation(inp, clf, summary, card_polisher):
 
     case_id = cases.record_case(
         title=title, severity=alert["severity"], confidence=inp["tier"],
-        source_ip=source_ip, summary=alert["narrative"],
+        source_ip=source_ip, summary=alert["narrative"], fingerprint=fp,
     )
     cases.record_detection(
         case_id, rule="correlation", source="cowrie+windows",
@@ -224,6 +243,10 @@ def _persist_anomaly(candidate, summary):
     Advisory: no graded severity (a human grades it via the verdict), rule and
     source both "anomaly", so it never masquerades as a rule-based finding.
     """
+    fp = f"anomaly|{candidate.src_ip}"
+    if cases.case_exists(fp):
+        summary["skipped_duplicate"] += 1
+        return
     f = candidate.features
     line = (
         f"Unsupervised layer flagged {candidate.src_ip} as anomalous "
@@ -235,7 +258,8 @@ def _persist_anomaly(candidate, summary):
     )
     case_id = cases.record_case(
         title=f"Anomaly candidate: {candidate.src_ip}",
-        severity=None, confidence="low", source_ip=candidate.src_ip, summary=line)
+        severity=None, confidence="low", source_ip=candidate.src_ip,
+        summary=line, fingerprint=fp)
     cases.record_detection(
         case_id, rule="anomaly", source="anomaly",
         severity=None, confidence="low",
@@ -257,7 +281,7 @@ def scan_anomalies(snapshot_path=None, live=False, top_k=10):
     summary = {
         "source": source, "n_sources": result.n_sources,
         "insufficient": result.insufficient, "min_sources": anomaly.MIN_SOURCES,
-        "persisted": 0, "candidates": [],
+        "persisted": 0, "candidates": [], "skipped_duplicate": 0,
     }
     if result.insufficient:
         return summary
@@ -322,6 +346,7 @@ def scan_and_persist(snapshot_path=None, card_polisher=None, section_polisher=No
         "cases": 0, "detections": 0, "reports": 0,
         "ai_polish": (card_polisher is not None) or (section_polisher is not None),
         "polished": 0, "polish_fallbacks": 0, "source": source, "fresh": fresh,
+        "skipped_duplicate": 0,
     }
 
     if fresh:

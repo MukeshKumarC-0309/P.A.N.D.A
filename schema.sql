@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS cases (
     status     TEXT NOT NULL DEFAULT 'open',
     source_ip  TEXT,                    -- shared attacker key, when correlated
     summary    TEXT,
-    disposition TEXT                    -- analyst verdict: confirmed / false_positive / benign (NULL = unreviewed)
+    disposition TEXT,                   -- analyst verdict: confirmed / false_positive / benign (NULL = unreviewed)
+    fingerprint TEXT                    -- stable id of the finding, for idempotent re-scans (NULL if not set)
 );
 
 CREATE TABLE IF NOT EXISTS detections (

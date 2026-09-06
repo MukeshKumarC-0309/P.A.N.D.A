@@ -127,10 +127,16 @@ opt-in cuts, so the core stays offline and lightweight.
   by host + timing, not source IP (Event 4720 carries none); its evidence
   says so. A standalone account creation is `confidence: medium` (a
   legitimate admin trips the same rule) with a null `source_ip`.
-- **Known limitation — append, not idempotent.** `scan_and_persist`
-  appends; re-running `tdr` writes the findings again. With the fixed
-  snapshot this is a demo artifact, not a real risk. Idempotency (skip or
-  supersede an already-recorded finding) is a deliberate later cut.
+- **Idempotent re-scans.** Each finding carries a stable `fingerprint`
+  (type + identifying fields + event timestamps), stored on the case;
+  `scan_and_persist` / `scan_anomalies` skip a finding whose fingerprint is
+  already present, so re-running never duplicates. `tdr fresh` clears and
+  rebuilds instead. Genuinely-distinct events differ in their timestamps, so
+  they fingerprint differently and are not collapsed.
+- **Schema migration on unlock** (`db._migrate`). Columns added after the
+  first release (`disposition`, `fingerprint`) are added to an older vault
+  automatically when it is unlocked — schema evolution with no wipe or manual
+  step, and the existing data is preserved.
 
 ## Correlation cut (Step 2 — offline, cross-source)
 

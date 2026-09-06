@@ -39,6 +39,20 @@ def init_db():
 connection = init_db()
 cursor = connection.cursor()
 
+# Columns added to `cases` after the first release. A vault created by an older
+# build won't have them, so _migrate() adds any that are missing after a vault
+# is loaded — schema evolution without a wipe or a manual migration step.
+_CASES_ADDED_COLUMNS = {"disposition": "TEXT", "fingerprint": "TEXT"}
+
+
+def _migrate():
+    """Add any post-release `cases` columns missing from the loaded vault."""
+    existing = {row[1] for row in cursor.execute("PRAGMA table_info(cases)")}
+    for column, coltype in _CASES_ADDED_COLUMNS.items():
+        if column not in existing:
+            cursor.execute("ALTER TABLE cases ADD COLUMN {} {}".format(column, coltype))
+    connection.commit()
+
 
 def unlock(password, path=DB_PATH):
     """Decrypt the vault file into the in-memory database.
@@ -54,6 +68,7 @@ def unlock(password, path=DB_PATH):
     salt, token = blob[:crypto.SALT_LENGTH], blob[crypto.SALT_LENGTH:]
     data = crypto.decrypt(token, password, salt)
     connection.deserialize(data)
+    _migrate()  # bring an older vault's schema up to date (adds new columns)
 
 
 def lock(password, path=DB_PATH):

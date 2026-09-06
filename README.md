@@ -201,9 +201,10 @@ rejected). A scan writes with `cases.record_case` / `record_detection` /
 `record_report` (the DB assigns ids); browsing is read-only and only inside an
 unlocked vault, so evidence is readable only after login by construction.
 
-> Note: a scan **appends** — re-running `TDR` writes the findings again.
-> Idempotency is a planned refinement; with the fixed snapshot this is a demo
-> artifact, not a risk.
+> Re-scanning is **idempotent**: each finding carries a stable fingerprint, so a
+> finding already recorded is skipped rather than duplicated. Use `TDR FRESH` to
+> clear and rebuild the store from scratch. (Older vaults are migrated on unlock
+> to add the `disposition` / `fingerprint` columns — no wipe needed.)
 
 ## Core vs. optional extras
 
