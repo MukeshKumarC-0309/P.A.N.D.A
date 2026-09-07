@@ -230,7 +230,7 @@ def handle_tdr(query):
         _in_unlocked_vault(action)
     except FileNotFoundError:
         _password_not_set()
-        password()
+        _set_password_with_recovery()
 
 
 def handle_cases(query):
@@ -239,7 +239,7 @@ def handle_cases(query):
         _in_unlocked_vault(browse_cases)
     except FileNotFoundError:
         _password_not_set()
-        password()
+        _set_password_with_recovery()
 
 
 def fallback(query):
