@@ -38,12 +38,28 @@ add an LLM report polish and a live Splunk pull. The engine's own build history
    random salt stored with the ciphertext. The live DB is held **in
    memory**; on disk there is only the encrypted blob. `unlock` decrypts
    into memory (`deserialize`), `lock` re-encrypts (`serialize`) — so
-   plaintext never touches disk. The key derives from the login password,
-   so a password change unlocks-old then locks-new. Tradeoff (accepted):
-   the vault re-encrypts on **exit** (in a `finally`, so a normal exit or
-   an error still saves) — only a hard kill mid-session loses that
-   session's changes. Could extend to envelope encryption (wrap a random
-   data key) so a password change re-wraps instead of re-encrypting.
+   plaintext never touches disk. Tradeoff (accepted): the vault re-encrypts
+   on **exit** (in a `finally`, so a normal exit or an error still saves) —
+   only a hard kill mid-session loses that session's changes.
+
+   **Envelope encryption + recovery key (v2 format).** The vault is
+   encrypted with a random **data key (DEK)**; the DEK is then *wrapped*
+   (Fernet-encrypted) twice — once under the scrypt-derived password key,
+   once under a random **recovery key** shown to the user once at setup.
+   Either unlocks (`unlock` via password, `recover` via recovery key). This
+   buys **recovery without a backdoor**: you still need one of two secrets
+   you deliberately kept, and losing *both* leaves the data unrecoverable —
+   the guarantee holds. A password change becomes a cheap **re-wrap** of the
+   DEK (not a whole-vault re-encrypt), and the recovery key survives it.
+   - **On-disk format is versioned.** v2 files start with a `PANDAv2` magic
+     marker + a small JSON header (salt, both wrapped DEKs, the vault token);
+     legacy **v1** files (salt + token) are still read, and `CHANGE`
+     transparently upgrades a v1 vault to v2 (revealing a recovery key). So
+     existing vaults keep working with no manual migration.
+   - **Threat-model cost (documented, accepted).** The vault is now only as
+     strong as the *weaker* of {password, recovery key}: a leaked recovery
+     key grants full access. That is the deliberate price of recoverability;
+     the recovery key is a secret to store offline, not a convenience code.
 3. **Parameterized data access** (`panda/db.py`). All queries go through
    a small DAO that binds values as `?` parameters and validates
    table/column identifiers against a strict whitelist (identifiers can't

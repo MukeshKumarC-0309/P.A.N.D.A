@@ -61,6 +61,7 @@ At the prompt:
 - `TDR` — scan the telemetry and persist findings as encrypted cases.
 - `CASES` — browse stored cases, filter by severity, open detections and reports.
 - `VAULT` — open the record system. `SET` / `CHANGE` — manage the password.
+- `RECOVER` — lost your password? Unlock with your recovery key and reset it.
 - `HELP`, `QUIT`.
 
 `TDR` runs on the offline snapshot by default; `TDR LIVE` pulls from Splunk when
@@ -242,12 +243,14 @@ pip install -e '.[live]'    # + set SPLUNK_USER / SPLUNK_PASSWORD / ...
 
 - **Password hashing — bcrypt** (`panda/auth.py`): salted, deliberately slow;
   never plaintext or a fast unsalted hash.
-- **Encrypted vault at rest** (`panda/crypto.py`, `panda/db.py`): on disk the
-  vault is only ciphertext — a random salt prepended to a Fernet (AES-CBC +
-  HMAC, authenticated) token, keyed from the password via scrypt (memory-hard).
-  Unlocking decrypts into an in-memory SQLite DB; locking re-encrypts —
-  plaintext never touches the disk. A wrong password or tampered file is
-  detected, not silently accepted.
+- **Encrypted vault at rest** (`panda/crypto.py`, `panda/db.py`): the vault is
+  encrypted with a random data key (Fernet, AES-CBC + HMAC, authenticated);
+  that data key is **wrapped** twice — once under a scrypt (memory-hard) key
+  from your password, once under a recovery key — so either can unlock, with no
+  backdoor (envelope encryption). Unlocking decrypts into an in-memory SQLite
+  DB; locking re-encrypts — plaintext never touches the disk, and a wrong
+  password/key or a tampered file is detected, not silently accepted. A
+  password change is a cheap re-wrap of the data key, not a full re-encrypt.
 - **Parameterized data access** (`panda/db.py`): values bind as `?` parameters;
   table/column identifiers validate against a strict whitelist — no user input
   is interpolated into SQL.
@@ -274,12 +277,16 @@ should state its own limits.
 - **A compromised host** — malware, a keylogger, or a screen-scraper capturing
   the password as you type, or reading the decrypted database out of process
   memory while the vault is **unlocked**.
-- **An attacker who already knows the vault password** (it is the only factor —
-  no MFA).
+- **An attacker who has *either* unlock secret.** There's no MFA: the vault
+  opens with the password **or** the recovery key, so it is only as strong as
+  the *weaker* of the two — a leaked recovery key grants full access. That's the
+  deliberate cost of recoverability (recovery without a backdoor); store the
+  recovery key offline and treat it like the password.
 - **Physical access to an unlocked session.**
-- It is **not** an HSM, **not** multi-user, and has no key rotation beyond a
-  password change (which re-encrypts). The TDR side **analyzes telemetry you
-  give it** — it does not itself harden or monitor the host it runs on.
+- It is **not** an HSM, **not** multi-user. Recovery is via the recovery key
+  (not a "forgot everything" reset — lose *both* secrets and the data is
+  unrecoverable, by design). The TDR side **analyzes telemetry you give it** —
+  it does not itself harden or monitor the host it runs on.
 
 These boundaries are deliberate for a local-first, single-user tool; widening
 them (MFA, envelope encryption, memory hardening) would be the next security
