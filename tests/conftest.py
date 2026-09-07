@@ -20,6 +20,7 @@ os.environ["PANDA_DB_PATH"] = str(Path(_TMPDIR) / "vault.db")
 import pytest
 
 from panda import vault, auth
+from panda import db as _dbmod
 
 # Children before parents, so foreign keys don't block the deletes.
 WIPE_ORDER = ("reports", "detections", "cases")
@@ -29,6 +30,7 @@ def _wipe():
     for table in WIPE_ORDER:
         vault.cur.execute("delete from {}".format(table))
     vault.conobj.commit()
+    _dbmod._reset_envelope()   # no envelope session state leaks between tests
 
 
 @pytest.fixture

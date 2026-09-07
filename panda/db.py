@@ -10,12 +10,24 @@ This module owns the one connection so any capability can share it — the
 personal-records vault (panda/vault.py) today, a future TDR (threat
 detection) component tomorrow, persisting into the same encrypted vault.
 """
+import base64
+import json
 import re
 import sqlite3
 from pathlib import Path
 
 from config import DB_PATH
 from panda import crypto
+
+# v2 (envelope / recovery-enabled) vault files start with this marker; anything
+# else is read as the legacy v1 format (a 16-byte salt + a Fernet token).
+_MAGIC_V2 = b"PANDAv2\n"
+
+# Envelope session state for the currently-open vault: the data key (DEK) and
+# the recovery-wrapped DEK. None => this vault is legacy v1 (password-only, no
+# recovery). Set by unlock / recover / init_envelope; used by lock to re-wrap.
+_data_key = None
+_wrapped_rk = None
 
 # schema.sql lives at the repo root (one level up from this panda/ package).
 # Resolve it from __file__ so it is found regardless of the launch directory.
@@ -54,36 +66,112 @@ def _migrate():
     connection.commit()
 
 
-def unlock(password, path=DB_PATH):
-    """Decrypt the vault file into the in-memory database.
+def _reset_envelope():
+    """Clear envelope session state (back to legacy v1 mode)."""
+    global _data_key, _wrapped_rk
+    _data_key, _wrapped_rk = None, None
 
-    On first run (no file yet) this is a no-op: memory keeps the empty
-    schema from init_db(). Raises crypto.BadPassword on a wrong password
-    or a tampered file.
+
+def has_recovery():
+    """True if the currently-open vault has recovery enabled (v2 envelope)."""
+    return _data_key is not None
+
+
+def init_envelope():
+    """Start a fresh envelope for a new (or upgraded) vault.
+
+    Generates a random data key and a random recovery key, wraps the data key
+    under the recovery key, and holds both in session state. Returns the
+    recovery key to show the user ONCE; the next lock() writes the vault in v2
+    (recovery-enabled) format. Call this at vault creation, or to upgrade a v1
+    vault (unlock it first, then init_envelope(), then lock()).
     """
+    global _data_key, _wrapped_rk
+    recovery_key = crypto.new_recovery_key()
+    _data_key = crypto.new_data_key()
+    _wrapped_rk = crypto.wrap_key(_data_key, recovery_key)
+    return recovery_key
+
+
+def unlock(password, path=DB_PATH):
+    """Decrypt the vault file into the in-memory database (via the password).
+
+    On first run (no file yet) this is a no-op: memory keeps the empty schema
+    from init_db(). Reads both formats: v2 (envelope) unwraps the data key with
+    the password; v1 (legacy) decrypts the whole blob. Raises crypto.BadPassword
+    on a wrong password or a tampered file.
+    """
+    global _data_key, _wrapped_rk
     path = Path(path)
     if not path.exists():
+        _reset_envelope()
         return
     blob = path.read_bytes()
-    salt, token = blob[:crypto.SALT_LENGTH], blob[crypto.SALT_LENGTH:]
-    data = crypto.decrypt(token, password, salt)
+    if blob.startswith(_MAGIC_V2):
+        header = json.loads(blob[len(_MAGIC_V2):].decode("utf-8"))
+        kek = crypto.derive_key(password, base64.b64decode(header["salt_pw"]))
+        dek = crypto.unwrap_key(header["wrapped_pw"].encode(), kek)  # BadPassword if wrong
+        data = crypto.decrypt_with(header["vault"].encode(), dek)
+        _data_key, _wrapped_rk = dek, header["wrapped_rk"].encode()
+    else:
+        salt, token = blob[:crypto.SALT_LENGTH], blob[crypto.SALT_LENGTH:]
+        data = crypto.decrypt(token, password, salt)
+        _reset_envelope()  # legacy v1 has no envelope
     connection.deserialize(data)
     _migrate()  # bring an older vault's schema up to date (adds new columns)
+
+
+def recover(recovery_key, path=DB_PATH):
+    """Unlock a v2 vault with its recovery key (when the password is lost).
+
+    Loads the vault so a new password can then be set (the next lock() re-wraps
+    the data key under it). Raises crypto.BadPassword if the recovery key is
+    wrong/tampered, or ValueError if the vault is missing or has no recovery
+    (a v1 vault created before recovery was enabled).
+    """
+    global _data_key, _wrapped_rk
+    if isinstance(recovery_key, str):
+        recovery_key = recovery_key.strip().encode()
+    path = Path(path)
+    if not path.exists():
+        raise ValueError("No vault to recover.")
+    blob = path.read_bytes()
+    if not blob.startswith(_MAGIC_V2):
+        raise ValueError("This vault has no recovery key.")
+    header = json.loads(blob[len(_MAGIC_V2):].decode("utf-8"))
+    dek = crypto.unwrap_key(header["wrapped_rk"].encode(), recovery_key)  # BadPassword if wrong
+    data = crypto.decrypt_with(header["vault"].encode(), dek)
+    _data_key, _wrapped_rk = dek, header["wrapped_rk"].encode()
+    connection.deserialize(data)
+    _migrate()
 
 
 def lock(password, path=DB_PATH):
     """Serialize the in-memory database and write it out encrypted.
 
-    A fresh salt is used each time and stored as the first bytes of the
-    file, ahead of the ciphertext.
+    v2 (envelope) when recovery is enabled: re-wrap the data key under the
+    password (fresh salt) and keep the recovery wrap, so a password change is a
+    cheap re-wrap, not a full re-encrypt. v1 (legacy) otherwise: the whole blob
+    under a password-derived key. Everything is authenticated (Fernet).
     """
     connection.commit()
     data = connection.serialize()
-    salt = crypto.new_salt()
-    token = crypto.encrypt(data, password, salt)
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_bytes(salt + token)
+    if _data_key is None:
+        salt = crypto.new_salt()
+        path.write_bytes(salt + crypto.encrypt(data, password, salt))
+        return
+    salt_pw = crypto.new_salt()
+    kek = crypto.derive_key(password, salt_pw)
+    header = {
+        "version": 2,
+        "salt_pw": base64.b64encode(salt_pw).decode(),
+        "wrapped_pw": crypto.wrap_key(_data_key, kek).decode(),
+        "wrapped_rk": _wrapped_rk.decode(),
+        "vault": crypto.encrypt_with(data, _data_key).decode(),
+    }
+    path.write_bytes(_MAGIC_V2 + json.dumps(header).encode("utf-8"))
 
 
 # ---------------------------------------------------------------------------

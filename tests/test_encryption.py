@@ -46,6 +46,90 @@ def test_unlock_missing_file_is_noop(db, tmp_path):
     assert dao.fetch_all("cases") == []
 
 
+def _wipe_memory():
+    dao.cursor.execute("delete from cases")
+    dao.connection.commit()
+
+
+def test_v2_roundtrip_by_password(db, tmp_path):
+    path = tmp_path / "v2.db"
+    dao.insert("cases", ROW)
+    dao.init_envelope()                       # enable recovery -> v2 on lock
+    dao.lock("pw", path=path)
+    assert path.read_bytes().startswith(b"PANDAv2")
+    _wipe_memory()
+    dao.unlock("pw", path=path)
+    assert dao.fetch_all("cases") == [ROW]
+
+
+def test_v2_recover_with_recovery_key(db, tmp_path):
+    path = tmp_path / "v2.db"
+    dao.insert("cases", ROW)
+    recovery_key = dao.init_envelope()
+    dao.lock("pw", path=path)
+    dao._reset_envelope()                     # a fresh process that lost the password
+    _wipe_memory()
+    dao.recover(recovery_key, path=path)      # unlock via the recovery key
+    assert dao.fetch_all("cases") == [ROW]
+
+
+def test_recover_with_wrong_key_is_rejected(db, tmp_path):
+    path = tmp_path / "v2.db"
+    dao.init_envelope()
+    dao.lock("pw", path=path)
+    with pytest.raises(crypto.BadPassword):
+        dao.recover(crypto.new_recovery_key(), path=path)
+
+
+def test_recover_on_a_v1_vault_raises(db, tmp_path):
+    path = tmp_path / "v1.db"
+    dao.insert("cases", ROW)
+    dao.lock("pw", path=path)                 # v1 (no envelope)
+    with pytest.raises(ValueError):
+        dao.recover(crypto.new_recovery_key(), path=path)
+
+
+def test_password_change_is_a_rewrap_and_recovery_still_works(db, tmp_path):
+    path = tmp_path / "v2.db"
+    dao.insert("cases", ROW)
+    recovery_key = dao.init_envelope()
+    dao.lock("pw", path=path)
+    dao.unlock("pw", path=path)               # change password: unlock old...
+    dao.lock("newpw", path=path)              # ...re-wrap under new (same data key)
+    _wipe_memory()
+    dao.unlock("newpw", path=path)            # new password works
+    assert dao.fetch_all("cases") == [ROW]
+    with pytest.raises(crypto.BadPassword):
+        dao.unlock("pw", path=path)           # old password no longer works
+    _wipe_memory()
+    dao.recover(recovery_key, path=path)      # recovery key still works post-change
+    assert dao.fetch_all("cases") == [ROW]
+
+
+def test_v1_vault_opens_and_can_upgrade_to_v2(db, tmp_path):
+    path = tmp_path / "up.db"
+    dao.insert("cases", ROW)
+    dao.lock("pw", path=path)                 # written as legacy v1
+    assert not path.read_bytes().startswith(b"PANDAv2")
+    dao.unlock("pw", path=path)               # v1 opens fine
+    recovery_key = dao.init_envelope()        # opt in to recovery
+    dao.lock("pw", path=path)                 # now written as v2
+    assert path.read_bytes().startswith(b"PANDAv2")
+    _wipe_memory()
+    dao.recover(recovery_key, path=path)      # upgraded vault is recoverable
+    assert dao.fetch_all("cases") == [ROW]
+
+
+def test_v2_file_has_no_plaintext(db, tmp_path):
+    path = tmp_path / "v2.db"
+    dao.insert("cases", (1, "2026-01-01T00:00:00+00:00", "ZEDNAME", "high",
+                         "high", "open", "10.0.0.9", "SEEKRIT_ID", None, None))
+    dao.init_envelope()
+    dao.lock("pw", path=path)
+    blob = path.read_bytes()
+    assert b"SEEKRIT_ID" not in blob and b"ZEDNAME" not in blob
+
+
 def test_unlock_migrates_an_older_vault(tmp_path):
     # A vault written by an older build lacks the later `cases` columns; unlock
     # must add them (and preserve the existing data), not fail.
