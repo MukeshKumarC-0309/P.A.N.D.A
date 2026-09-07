@@ -70,6 +70,49 @@ def test_no_password_set_prompts_to_set_one(clean_password, monkeypatch, capsys)
     assert calls == ["set"]
 
 
+def test_set_first_time_shows_recovery_key(clean_password, monkeypatch, capsys):
+    # clean_password guarantees no password file -> first-time setup path.
+    monkeypatch.setattr(main, "password", lambda: "pw")          # sets hash, returns raw pw
+    monkeypatch.setattr(main.db, "init_envelope", lambda: b"RECOVERYKEY123")
+    monkeypatch.setattr(main.db, "lock", lambda p: None)
+    main.handle_set("set")
+    out = capsys.readouterr().out
+    assert "RECOVERYKEY123" in out and "recovery key" in out.lower()
+
+
+def test_set_refuses_when_password_exists(clean_password, monkeypatch, capsys):
+    main.PASSWORD_PATH.parent.mkdir(parents=True, exist_ok=True)
+    main.PASSWORD_PATH.write_text("existing-hash")              # a password already exists
+    called = []
+    monkeypatch.setattr(main, "_set_password_with_recovery", lambda: called.append(1))
+    main.handle_set("set")
+    assert not called and "already set" in capsys.readouterr().out
+
+
+def test_recover_resets_password_with_recovery_key(clean_password, monkeypatch, capsys):
+    log = []
+    monkeypatch.setattr(main.db, "recover", lambda k: log.append(("recover", k)))
+    monkeypatch.setattr(main, "password", lambda: "newpw")
+    monkeypatch.setattr(main.db, "lock", lambda p: log.append(("lock", p)))
+    inputs = iter(["my-recovery-key"])
+    monkeypatch.setattr(builtins, "input", lambda *a, **k: next(inputs))
+    main.handle_recover("recover")
+    assert log == [("recover", "my-recovery-key"), ("lock", "newpw")]
+    assert "reset" in capsys.readouterr().out.lower()
+
+
+def test_recover_with_wrong_key_does_not_reset(clean_password, monkeypatch, capsys):
+    from panda import crypto
+    def boom(_k):
+        raise crypto.BadPassword
+    monkeypatch.setattr(main.db, "recover", boom)
+    reset = []
+    monkeypatch.setattr(main, "password", lambda: reset.append(1) or "x")
+    monkeypatch.setattr(builtins, "input", lambda *a, **k: "wrong-key")
+    main.handle_recover("recover")
+    assert not reset and "incorrect" in capsys.readouterr().out.lower()
+
+
 def test_ctrl_c_at_prompt_exits_gracefully(monkeypatch, capsys):
     monkeypatch.setattr(main, "banner", lambda: None)
 

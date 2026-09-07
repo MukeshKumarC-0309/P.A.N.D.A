@@ -9,10 +9,10 @@ panda/router.py: each command registers keywords and a handler(query);
 new capabilities (e.g. TDR commands) register without editing this loop.
 """
 from panda.system import help, banner, takecommand
-from panda.auth import password, check_password
+from panda.auth import password, check_password, PASSWORD_PATH
 from panda.vault import DATABASE
 from panda.browse import browse_cases
-from panda import router, db, bridge, ui
+from panda import router, db, bridge, ui, crypto
 import config
 
 
@@ -60,13 +60,45 @@ def _open_vault_session():
     DATABASE()
 
 
+def _show_recovery_key(recovery_key, upgraded=False):
+    """Show the recovery key once, prominently, with a keep-it-safe warning."""
+    from rich.panel import Panel
+    key = recovery_key.decode() if isinstance(recovery_key, bytes) else recovery_key
+    lead = "Recovery is now enabled." if upgraded else "Your vault is ready."
+    ui.console.print(Panel(
+        "[bold]{}[/bold]  Save this recovery key somewhere safe and OFFLINE.\n"
+        "It is the ONLY way back in if you forget your password, it cannot be\n"
+        "shown again, and anyone who has it can open your vault:\n\n"
+        "    [title]{}[/title]".format(lead, key),
+        title="[title]🔑  Recovery key — shown once[/title]",
+        border_style="yellow", expand=False))
+
+
+def _set_password_with_recovery():
+    """First-time setup: set the password, create the recovery-enabled (v2)
+    vault, and reveal the recovery key once."""
+    pw = password()                    # writes the bcrypt hash, returns the raw pw
+    recovery_key = db.init_envelope()  # fresh data key wrapped by a recovery key
+    db.lock(pw)                        # write the empty v2 vault to disk
+    _show_recovery_key(recovery_key)
+
+
 def handle_vault(query):
     try:
         _in_unlocked_vault(_open_vault_session)
     except FileNotFoundError:
         _password_not_set()
-        password()
+        _set_password_with_recovery()
         _in_unlocked_vault(_open_vault_session)
+
+
+def handle_set(query):
+    """First-time password setup (with a recovery key). Refuses if one exists."""
+    if PASSWORD_PATH.exists():
+        ui.warn("A password is already set — use CHANGE to change it, "
+                "or RECOVER if you lost it.")
+        return
+    _set_password_with_recovery()
 
 
 def handle_change(query):
@@ -74,15 +106,37 @@ def handle_change(query):
         p = input("P.A.N.D.A : Enter current password - ")
         if check_password(p):
             print('P.A.N.D.A : You can change your password now. ')
-            db.unlock(p)                 # load the vault with the current key
-            new_password = password()    # sets the new hash, returns the raw pw
-            db.lock(new_password)        # re-encrypt the vault under the new key
-            print("P.A.N.D.A : Password updated successfully.")
+            db.unlock(p)                     # load the vault with the current key
+            upgrade_key = None
+            if not db.has_recovery():        # legacy v1 vault -> upgrade to v2
+                upgrade_key = db.init_envelope()
+            new_password = password()        # sets the new hash, returns the raw pw
+            db.lock(new_password)            # re-wrap the data key under the new password
+            ui.ok("Password updated successfully.")
+            if upgrade_key:
+                _show_recovery_key(upgrade_key, upgraded=True)
         else:
-            print("P.A.N.D.A : Error, invalid input.")
+            ui.err("Error, invalid input.")
     except FileNotFoundError:
         _password_not_set()
-        password()
+        _set_password_with_recovery()
+
+
+def handle_recover(query):
+    """Lost-password recovery: unlock with the recovery key, then set a new one."""
+    key = input("P.A.N.D.A : Enter your recovery key - ").strip()
+    try:
+        db.recover(key)                      # unlock the vault via the recovery key
+    except crypto.BadPassword:
+        ui.err("That recovery key is incorrect.")
+        return
+    except (ValueError, FileNotFoundError) as e:
+        ui.err(str(e) or "No recoverable vault found.")
+        return
+    ui.ok("Recovery key accepted — set a new password now.")
+    new_password = password()
+    db.lock(new_password)                    # re-wrap the data key under the new password
+    ui.ok("Password reset. Your data is intact and your recovery key is unchanged.")
 
 
 def _kv_panel(rows, title):
@@ -197,8 +251,9 @@ def fallback(query):
 # ---------------------------------------------------------------------------
 
 router.register("vault", ["vault"], handle_vault)
-router.register("set", ["set"], lambda q: password())
+router.register("set", ["set"], handle_set)
 router.register("change", ["change"], handle_change)
+router.register("recover", ["recover"], handle_recover)
 router.register("tdr", ["tdr"], handle_tdr)
 router.register("cases", ["cases"], handle_cases)
 router.register("help", ["help"], lambda q: help())

@@ -85,8 +85,9 @@ def help():
     t.add_row("", "[muted]TDR FRESH rebuilds · TDR LIVE pulls from Splunk · "
                   "TDR ANOMALY runs the anomaly layer[/muted]")
     t.add_row("CASES", "Browse the stored TDR cases, detections and reports")
-    t.add_row("SET", "Set the vault password (first-time setup)")
-    t.add_row("CHANGE", "Change the vault password (re-encrypts the vault)")
+    t.add_row("SET", "Set the vault password + recovery key (first-time setup)")
+    t.add_row("CHANGE", "Change the vault password (re-wraps the vault)")
+    t.add_row("RECOVER", "Lost your password? Unlock with your recovery key and reset it")
     t.add_row("HELP", "Show this list")
     t.add_row("QUIT", "Exit PANDA")
     ui.console.print(Panel(t, title="[title]COMMANDS[/title]",
