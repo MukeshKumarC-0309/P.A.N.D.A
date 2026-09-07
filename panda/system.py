@@ -93,47 +93,41 @@ def _version():
         return ""
 
 
-def _rule(width=62):
-    return _style((("═" if _FANCY else "=") * width), DIM, CYAN)
-
-
 def banner():
-    logo = ("🐼  " if _FANCY else "") + "P.A.N.D.A"
+    from rich.panel import Panel
+    from panda import ui
+
     version = _version()
-    dot = " · " if _FANCY else " | "
-    print()
-    print(_rule())
-    print("  " + _style(logo, BOLD, BRIGHT_CYAN)
-          + (("   " + _style(version, DIM)) if version else ""))
-    print("  " + _style("Secure vault " + ("·" if _FANCY else "+")
-                        + " threat-detection platform", CYAN))
-    print(_rule())
-    print("  " + _style("Type ", DIM) + _style("HELP", BOLD)
-          + _style(dot, DIM) + _style("QUIT", BOLD) + _style(" to exit", DIM))
-    print()
+    logo = "[title]🐼  P.A.N.D.A[/title]" + (f"  [muted]{version}[/muted]" if version else "")
+    body = logo + "\n[cyan]Secure vault · threat-detection platform[/cyan]"
+    ui.console.print()
+    ui.console.print(Panel.fit(body, border_style="cyan", padding=(0, 2)))
+    ui.console.print(
+        "[muted]Type[/muted] [bold]HELP[/bold] [muted]for commands ·[/muted] "
+        "[bold]QUIT[/bold] [muted]to exit[/muted]")
+    ui.console.print()
 
 
 def help():
-    sep = ("─" if _FANCY else "-") * 58
-    dot = " · " if _FANCY else " - "
+    from rich import box
+    from rich.panel import Panel
+    from rich.table import Table
+    from panda import ui
 
-    def cmd(name, desc):
-        print("  " + _style(name.ljust(7), BOLD, GREEN) + _style(dot, DIM) + desc)
-
-    print()
-    print("  " + _style("COMMANDS", BOLD, BRIGHT_CYAN))
-    print("  " + _style(sep, DIM))
-    cmd("VAULT", "Unlock the encrypted vault to view/edit your records")
-    cmd("TDR", "Scan the threat telemetry and store findings as cases")
-    print("  " + _style(" " * 10 + "TDR FRESH rebuilds  ·  TDR LIVE pulls from Splunk", DIM))
-    print("  " + _style(" " * 10 + "TDR ANOMALY runs the unsupervised anomaly layer", DIM))
-    cmd("CASES", "Browse the stored TDR cases, detections and reports")
-    cmd("SET", "Set the vault password (first-time setup)")
-    cmd("CHANGE", "Change the vault password (re-encrypts the vault)")
-    cmd("HELP", "Show this list")
-    cmd("QUIT", "Exit PANDA")
-    print("  " + _style(sep, DIM))
-    print()
+    t = Table(box=box.SIMPLE, show_header=False, padding=(0, 2), expand=False)
+    t.add_column(style="bold green", no_wrap=True)
+    t.add_column()
+    t.add_row("VAULT", "Unlock the encrypted vault to view/edit your records")
+    t.add_row("TDR", "Scan the threat telemetry and store findings as cases")
+    t.add_row("", "[muted]TDR FRESH rebuilds · TDR LIVE pulls from Splunk · "
+                  "TDR ANOMALY runs the anomaly layer[/muted]")
+    t.add_row("CASES", "Browse the stored TDR cases, detections and reports")
+    t.add_row("SET", "Set the vault password (first-time setup)")
+    t.add_row("CHANGE", "Change the vault password (re-encrypts the vault)")
+    t.add_row("HELP", "Show this list")
+    t.add_row("QUIT", "Exit PANDA")
+    ui.console.print(Panel(t, title="[title]COMMANDS[/title]",
+                           border_style="cyan", expand=False))
 
 
 def takecommand():
