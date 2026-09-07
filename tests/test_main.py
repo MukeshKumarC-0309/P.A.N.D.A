@@ -62,12 +62,12 @@ def test_wrong_password_denies_and_never_unlocks(clean_password, monkeypatch, ca
 
 
 def test_no_password_set_prompts_to_set_one(clean_password, monkeypatch, capsys):
-    calls = []
-    monkeypatch.setattr(main, "password", lambda: calls.append("set"))
+    called = []
+    monkeypatch.setattr(main, "_set_password_with_recovery", lambda: called.append(1))
     monkeypatch.setattr(builtins, "input", lambda *a, **k: "anything")
     main.handle_cases("cases")                           # no password file exists
     assert "Password hasn't been set" in capsys.readouterr().out
-    assert calls == ["set"]
+    assert called == [1]                                 # routed into first-time setup
 
 
 def test_set_first_time_shows_recovery_key(clean_password, monkeypatch, capsys):
