@@ -70,6 +70,29 @@ def test_no_password_set_prompts_to_set_one(clean_password, monkeypatch, capsys)
     assert calls == ["set"]
 
 
+def test_ctrl_c_at_prompt_exits_gracefully(monkeypatch, capsys):
+    monkeypatch.setattr(main, "banner", lambda: None)
+
+    def interrupt():
+        raise KeyboardInterrupt
+    monkeypatch.setattr(main, "takecommand", interrupt)
+    main.main()  # must not raise
+    assert "Goodbye" in capsys.readouterr().out
+
+
+def test_ctrl_c_during_command_cancels_and_continues(monkeypatch, capsys):
+    monkeypatch.setattr(main, "banner", lambda: None)
+    queries = iter(["scan", "quit"])
+    monkeypatch.setattr(main, "takecommand", lambda: next(queries))
+
+    def dispatch(query, fb):
+        raise KeyboardInterrupt        # interrupt mid-command
+    monkeypatch.setattr(main.router, "dispatch", dispatch)
+
+    main.main()                        # cancels "scan", then "quit" exits
+    assert "Cancelled" in capsys.readouterr().out
+
+
 def test_loop_survives_a_handler_error(monkeypatch, capsys):
     # A handler blowing up must print a message and return to the prompt, not
     # crash the whole session.

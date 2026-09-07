@@ -207,14 +207,26 @@ router.register("help", ["help"], lambda q: help())
 def main():
     banner()
     while True:
-        query = takecommand()
+        try:
+            query = takecommand()
+        except (KeyboardInterrupt, EOFError):
+            # Ctrl+C / Ctrl+D at the prompt: exit cleanly, no traceback.
+            ui.console.print("\n[muted]Goodbye.[/muted]")
+            break
         if router.matches("quit", query):
             break
         try:
             router.dispatch(query, fallback)
+        except (KeyboardInterrupt, EOFError):
+            # Ctrl+C / Ctrl+D mid-command: cancel it and return to the prompt.
+            # (The vault re-locks in _in_unlocked_vault's finally regardless.)
+            ui.console.print("\n[muted]Cancelled.[/muted]")
         except Exception:  # a bad command must not kill the whole session
-            print("P.A.N.D.A : Something went wrong with that command. Please try again.")
+            ui.err("Something went wrong with that command. Please try again.")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        pass  # final safety net (e.g. Ctrl+C during startup)
