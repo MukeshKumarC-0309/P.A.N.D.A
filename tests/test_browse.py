@@ -12,13 +12,12 @@ from panda import browse, cases
 MAX_LINE = 200  # generous bound; unwrapped, a 500-char summary alone blows past it
 
 
-def test_browse_empty_vault_does_not_crash(db, capsys, monkeypatch):
-    # Column wrapping (maxcolwidths) must not trip tabulate on an empty row list:
-    # browsing a vault with no cases renders the header, not an IndexError.
-    steps = iter([""])  # blank severity -> empty list -> blank case id returns
+def test_browse_empty_vault_shows_empty_state(db, capsys, monkeypatch):
+    # Browsing a vault with no cases shows a friendly empty-state, not a crash.
+    steps = iter([""])  # blank severity -> empty list -> returns
     monkeypatch.setattr(builtins, "input", lambda *a, **k: next(steps, ""))
     browse.browse_cases()
-    assert "Case ID" in capsys.readouterr().out
+    assert "No cases yet" in capsys.readouterr().out
 
 
 def test_browse_wraps_wide_columns(db, capsys, monkeypatch):
@@ -41,8 +40,8 @@ def test_browse_wraps_wide_columns(db, capsys, monkeypatch):
 
 def test_browse_records_analyst_verdict(db, capsys, monkeypatch):
     cid = cases.record_case(title="Suspicious", severity="high", source_ip="10.0.0.9")
-    # open the case -> skip report -> mark it confirmed
-    steps = iter(["", str(cid), "", "confirmed"])
+    # open the case (no reports -> no report prompt) -> mark it confirmed
+    steps = iter(["", str(cid), "confirmed"])
     monkeypatch.setattr(builtins, "input", lambda *a, **k: next(steps, ""))
     browse.browse_cases()
     assert cases.get_case(cid)[8] == "confirmed"        # verdict persisted

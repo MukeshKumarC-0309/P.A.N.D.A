@@ -362,8 +362,8 @@ A few design calls I'd call out:
 
 **A bug the tests caught.** Before refactoring the interactive shell into a
 class, I wrote *characterization tests* to pin its current behavior. They
-immediately surfaced a latent crash — column-wrapping tripped `tabulate` on an
-empty table, so browsing a fresh vault would have thrown. I fixed it under the
+immediately surfaced a latent crash — column-wrapping tripped the table renderer
+on an empty table, so browsing a fresh vault would have thrown. I fixed it under the
 net, then did the refactor knowing behavior was locked. Writing the tests first
 paid for itself before the refactor even started.
 

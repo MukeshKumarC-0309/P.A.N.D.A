@@ -10,7 +10,6 @@ readme = "README.md"
 requires-python = ">=3.10"
 classifiers = ["License :: OSI Approved :: MIT License"]
 dependencies = [
-    "tabulate",
     "rich",
     "python-dotenv",
     "bcrypt",

@@ -30,10 +30,10 @@ def test_show_tables_lists_builtin_tables(db, monkeypatch, capsys):
 
 
 def test_cases_routes_to_browse(db, monkeypatch, capsys):
-    # CASES -> browse_cases: blank severity, blank case id (go back), then QUIT.
-    _run(["CASES", "", "", "QUIT"], monkeypatch)
+    # CASES -> browse_cases on an empty vault shows the empty-state (proves it routed).
+    _run(["CASES", "", "QUIT"], monkeypatch)
     out = capsys.readouterr().out
-    assert "Case ID" in out and "Severity" in out          # the cases list header
+    assert "No cases yet" in out
 
 
 def test_search_rejects_bad_identifier(db, monkeypatch, capsys):

@@ -8,11 +8,11 @@ the PANDA TDR threat-detection engine. Routing is handled by
 panda/router.py: each command registers keywords and a handler(query);
 new capabilities (e.g. TDR commands) register without editing this loop.
 """
-from panda.system import help, banner, takecommand, style, BOLD, DIM, BRIGHT_CYAN
+from panda.system import help, banner, takecommand
 from panda.auth import password, check_password
 from panda.vault import DATABASE
 from panda.browse import browse_cases
-from panda import router, db, bridge
+from panda import router, db, bridge, ui
 import config
 
 
@@ -85,57 +85,67 @@ def handle_change(query):
         password()
 
 
+def _kv_panel(rows, title):
+    """A borderless key/value table inside a titled cyan panel."""
+    from rich.panel import Panel
+    from rich.table import Table
+
+    t = Table(box=None, show_header=False)
+    t.add_column(style="muted", justify="right")
+    t.add_column()
+    for key, value in rows:
+        t.add_row(key, value)
+    ui.console.print(Panel(t, title=title, border_style="cyan", expand=False))
+
+
 def _print_scan_summary(s):
-    """Print what a TDR scan wrote to the case store."""
-    rule = style("-" * 60, DIM)
-    print(rule)
-    print(style("P.A.N.D.A TDR : scan complete", BOLD, BRIGHT_CYAN))
-    print(rule)
-    if s["fresh"]:
-        print(style(" (fresh scan — cleared previously stored cases)", DIM))
-    print(f" Source               : {s['source']}")
-    print(f" Cases persisted      : {style(str(s['cases']), BOLD)}")
-    print(f"   kill chains        : {s['chains']}")
-    print(f"   brute/spray        : {s['brute_spray']}")
-    print(f"   account creations  : {s['account_creations']}")
-    print(f"   correlations       : {s['correlations']}")
-    print(f" Detections           : {s['detections']}")
-    if s["ai_polish"]:
-        print(f" Reports              : {s['reports']} — LLM-polished "
-              f"({s['polished']} polished, {s['polish_fallbacks']} fell back)")
-    else:
-        print(f" Reports              : {s['reports']} — deterministic "
-              f"(AI extra not installed)")
-    print(f" Skipped (subsumed by a chain) : "
-          f"{s['skipped_brute_spray']} brute/spray, "
-          f"{s['skipped_account_creations']} account creation(s)")
+    """Render what a TDR scan wrote to the case store."""
+    reports = ("{} — LLM-polished ({} polished, {} fell back)".format(
+                   s["reports"], s["polished"], s["polish_fallbacks"])
+               if s["ai_polish"] else
+               "{} — [muted]deterministic (AI extra not installed)[/muted]".format(s["reports"]))
+    rows = [
+        ("Source", s["source"]),
+        ("Cases persisted", "[bold]{}[/bold]".format(s["cases"])),
+        ("  kill chains", str(s["chains"])),
+        ("  brute / spray", str(s["brute_spray"])),
+        ("  account creations", str(s["account_creations"])),
+        ("  correlations", str(s["correlations"])),
+        ("Detections", str(s["detections"])),
+        ("Reports", reports),
+        ("Skipped (subsumed)", "{} brute/spray, {} account creation(s)".format(
+            s["skipped_brute_spray"], s["skipped_account_creations"])),
+    ]
     if s["skipped_duplicate"]:
-        print(f" Skipped (already recorded)    : {s['skipped_duplicate']}")
-    print(rule)
-    print("P.A.N.D.A : Use the CASES command to browse them.")
+        rows.append(("Skipped (already recorded)", str(s["skipped_duplicate"])))
+    title = "[title]TDR scan complete[/title]" + (" [muted](fresh)[/muted]" if s["fresh"] else "")
+    _kv_panel(rows, title)
+    ui.console.print("[muted]Use [bold]CASES[/bold] to browse them.[/muted]")
 
 
 def _print_anomaly_summary(s):
-    """Print the result of an unsupervised anomaly scan."""
-    rule = style("-" * 60, DIM)
-    print(rule)
-    print(style("P.A.N.D.A TDR : anomaly scan (advisory)", BOLD, BRIGHT_CYAN))
-    print(rule)
-    print(f" Source               : {s['source']}")
+    """Render the result of an unsupervised anomaly scan."""
     if s["insufficient"]:
-        print(f" Insufficient data    : {s['n_sources']} distinct source(s); "
-              f"need >= {s['min_sources']} to model.")
-        print(" Point at a larger capture (PANDA_SNAPSHOT) or run TDR LIVE.")
+        rows = [
+            ("Source", s["source"]),
+            ("Insufficient data",
+             "{} distinct source(s); need >= {} to model.".format(s["n_sources"], s["min_sources"])),
+            ("", "[muted]Point at a larger capture (PANDA_SNAPSHOT) or run TDR LIVE.[/muted]"),
+        ]
+        _kv_panel(rows, "[title]TDR anomaly scan (advisory)[/title]")
+        return
+    rows = [
+        ("Source", s["source"]),
+        ("Sources modeled", str(s["n_sources"])),
+        ("Anomaly candidates", "[bold]{}[/bold] (low-confidence cases)".format(s["persisted"])),
+    ]
+    for ip, score in s["candidates"]:
+        rows.append(("", "[bold]{}[/bold]  [muted]score {}[/muted]".format(ip, score)))
+    _kv_panel(rows, "[title]TDR anomaly scan (advisory)[/title]")
+    if s["persisted"]:
+        ui.console.print("[muted]Review them with [bold]CASES[/bold] and mark a verdict.[/muted]")
     else:
-        print(f" Sources modeled      : {s['n_sources']}")
-        print(f" Anomaly candidates   : {style(str(s['persisted']), BOLD)} (low-confidence cases)")
-        for ip, score in s["candidates"]:
-            print("   - " + style(ip, BOLD) + style("  (score {})".format(score), DIM))
-        print(rule)
-        if s["persisted"]:
-            print("P.A.N.D.A : Review them with CASES and mark a verdict.")
-        else:
-            print("P.A.N.D.A : No outliers flagged — nothing stood out from the baseline.")
+        ui.console.print("[muted]No outliers flagged — nothing stood out from the baseline.[/muted]")
 
 
 def handle_tdr(query):
@@ -150,12 +160,18 @@ def handle_tdr(query):
     """
     live = router.matches("live", query)
     fresh = router.matches("fresh", query)
-    if router.matches("anomaly", query):
-        action = lambda: _print_anomaly_summary(bridge.scan_anomalies(
-            snapshot_path=config.SNAPSHOT_PATH, live=live))
-    else:
-        action = lambda: _print_scan_summary(bridge.scan_and_persist(
-            snapshot_path=config.SNAPSHOT_PATH, live=live, fresh=fresh))
+    note = "Pulling from Splunk…" if live else "Scanning telemetry…"
+
+    def action():
+        if router.matches("anomaly", query):
+            with ui.console.status("[title]{}[/title]".format(note), spinner="dots"):
+                s = bridge.scan_anomalies(snapshot_path=config.SNAPSHOT_PATH, live=live)
+            _print_anomaly_summary(s)
+        else:
+            with ui.console.status("[title]{}[/title]".format(note), spinner="dots"):
+                s = bridge.scan_and_persist(snapshot_path=config.SNAPSHOT_PATH, live=live, fresh=fresh)
+            _print_scan_summary(s)
+
     try:
         _in_unlocked_vault(action)
     except FileNotFoundError:

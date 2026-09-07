@@ -1,22 +1,17 @@
 """
-Console I/O for the PANDA CLI: a styled startup banner, the command prompt, and
-the help text.
+Console I/O for the PANDA CLI: the startup banner, the help text, and the
+command prompt.
 
-Styling is stdlib-only and degrades gracefully — no ANSI color when the output
-isn't a terminal or NO_COLOR is set, and ASCII fallbacks when the console can't
-encode box-drawing characters / emoji. So it looks good in a modern terminal and
-stays correct everywhere else (tests, pipes, legacy code pages).
+The banner and help render with rich (see panda/ui.py); the prompt uses a small
+ANSI helper so the monkeypatch-friendly builtins.input still drives it. Both
+degrade gracefully — plain text when output isn't a terminal or NO_COLOR is set.
 """
 import os
 import sys
 
 # ANSI SGR codes used below.
 _RESET = "\033[0m"
-BOLD, DIM = 1, 2
-RED, BRIGHT_RED = 31, 91
-GREEN, BRIGHT_GREEN = 32, 92
-YELLOW = 33
-CYAN, BRIGHT_CYAN = 36, 96
+BOLD, DIM, BRIGHT_GREEN = 1, 2, 92
 
 
 def _color_supported():
@@ -51,38 +46,6 @@ def _style(text, *codes):
     if not _COLOR or not codes:
         return text
     return "".join("\033[{}m".format(c) for c in codes) + text + _RESET
-
-
-# Public styling helper for the rest of the CLI (scan summaries, case tables).
-style = _style
-
-# Severity -> color. Unknown / None severities render plain.
-_SEV_CODES = {
-    "critical": (BOLD, BRIGHT_RED),
-    "high": (BRIGHT_RED,),
-    "medium": (YELLOW,),
-    "low": (DIM,),
-}
-
-
-def severity(value):
-    """Colorize a severity string by level (plain for unknown / None)."""
-    codes = _SEV_CODES.get((value or "").lower())
-    return _style(value, *codes) if (value and codes) else (value or "")
-
-
-# Analyst verdict -> color.
-_DISP_CODES = {
-    "confirmed": (BRIGHT_RED,),      # a verified real threat
-    "false_positive": (DIM,),        # dismissed
-    "benign": (GREEN,),              # reviewed, harmless
-}
-
-
-def disposition(value):
-    """Colorize an analyst verdict (plain for unknown / None / unreviewed)."""
-    codes = _DISP_CODES.get((value or "").lower())
-    return _style(value, *codes) if (value and codes) else (value or "")
 
 
 def _version():

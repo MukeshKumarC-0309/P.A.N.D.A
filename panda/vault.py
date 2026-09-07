@@ -15,11 +15,13 @@ zero-install, offline, per-user tool.
 """
 import sqlite3
 
-from tabulate import tabulate
+from rich import box
+from rich.table import Table
 
 from panda.db import connection as conobj, cursor as cur
 from panda.db import safe_identifier, insert
 from panda.browse import browse_cases
+from panda import ui
 
 
 class VaultShell:
@@ -56,7 +58,11 @@ class VaultShell:
             "select name from sqlite_master where type='table' order by name")
         rows = self.cur.fetchall()
         self.conn.commit()
-        print(tabulate(rows, headers=["Tables"], tablefmt="grid"))
+        t = Table(box=box.SIMPLE, header_style="bold")
+        t.add_column("Tables")
+        for (name,) in rows:
+            t.add_row(name)
+        ui.console.print(t)
         print()
 
     def help(self):

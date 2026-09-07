@@ -347,6 +347,18 @@ needed, and there is no real user data). The DAO and encryption tests,
 which had used `Emergency` merely as a sample table, now exercise the
 `cases` table instead — so that coverage is preserved, not lost.
 
+## Presentation (rich)
+
+The CLI renders through [rich](https://github.com/Textualize/rich) via one
+shared console (`panda/ui.py`): a paneled banner/help, colored tables (severity
+red/yellow, analyst verdicts), Markdown-rendered incident reports, and a spinner
+during scans / the Splunk pull so there's no dead air. rich is a **core**
+dependency but **offline** and pure-Python (installs on 3.14, unlike crewai), so
+it doesn't touch the no-network identity; and it degrades on its own — plain
+text when output isn't a terminal or `NO_COLOR` is set. The styling is kept
+deliberately restrained: a tool used daily should be calm and legible, not
+flashy. (This replaced `tabulate` and a hand-rolled ANSI layer.)
+
 ## Lineage
 
 Derived from PandaVault. The record system's history — the MySQL→SQLite

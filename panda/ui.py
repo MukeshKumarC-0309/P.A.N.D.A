@@ -9,6 +9,8 @@ Kept deliberately restrained: a calm, consistent palette (severity / disposition
 / status), not decoration for its own sake — the goal is a tool that's pleasant
 to use daily, not flashy for ten seconds.
 """
+import sys
+
 from rich.console import Console
 from rich.theme import Theme
 
@@ -27,9 +29,11 @@ _THEME = Theme({
     "disp.benign": "green",
 })
 
-# file defaults to the current sys.stdout at print time, so pytest's capture and
-# redirects are honored.
-console = Console(theme=_THEME, highlight=False)
+# In a real terminal, let rich auto-detect the width; when output is captured or
+# piped (no tty), fix a comfortable width so tables aren't crushed to 80 columns.
+_interactive = bool(getattr(sys.stdout, "isatty", lambda: False)())
+console = Console(theme=_THEME, highlight=False,
+                  width=None if _interactive else 120)
 
 
 def _tagged(value, prefix):
