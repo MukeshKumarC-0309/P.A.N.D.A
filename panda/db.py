@@ -130,8 +130,11 @@ def recover(recovery_key, path=DB_PATH):
     (a v1 vault created before recovery was enabled).
     """
     global _data_key, _wrapped_rk
-    if isinstance(recovery_key, str):
-        recovery_key = recovery_key.strip().encode()
+    # Tolerate copy-paste noise and the spaced/grouped display form: strip all
+    # whitespace (a Fernet key's base64 never contains spaces).
+    if isinstance(recovery_key, bytes):
+        recovery_key = recovery_key.decode()
+    recovery_key = "".join(recovery_key.split()).encode()
     path = Path(path)
     if not path.exists():
         raise ValueError("No vault to recover.")

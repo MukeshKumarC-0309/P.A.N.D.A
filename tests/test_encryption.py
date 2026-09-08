@@ -73,6 +73,19 @@ def test_v2_recover_with_recovery_key(db, tmp_path):
     assert dao.fetch_all("cases") == [ROW]
 
 
+def test_recover_tolerates_the_spaced_display_form(db, tmp_path):
+    path = tmp_path / "v2.db"
+    dao.insert("cases", ROW)
+    recovery_key = dao.init_envelope()
+    dao.lock("pw", path=path)
+    dao._reset_envelope()
+    _wipe_memory()
+    key = recovery_key.decode()
+    spaced = " ".join(key[i:i + 4] for i in range(0, len(key), 4))  # as displayed
+    dao.recover(spaced, path=path)                                  # still accepted
+    assert dao.fetch_all("cases") == [ROW]
+
+
 def test_recover_with_wrong_key_is_rejected(db, tmp_path):
     path = tmp_path / "v2.db"
     dao.init_envelope()

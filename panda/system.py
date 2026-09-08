@@ -40,6 +40,17 @@ def _unicode_supported():
 _COLOR = _color_supported()
 _FANCY = _unicode_supported()
 
+# Block wordmark shown at startup (only when the console can render it); the
+# per-line styles fade cyan -> blue for a clean, "futuristic" look.
+_LOGO_LINES = (
+    "  ██████   █████  ██   ██ ██████   █████ ",
+    "  ██   ██ ██   ██ ███  ██ ██   ██ ██   ██",
+    "  ██████  ███████ ██ █ ██ ██   ██ ███████",
+    "  ██      ██   ██ ██  ███ ██   ██ ██   ██",
+    "  ██      ██   ██ ██   ██ ██████  ██   ██",
+)
+_LOGO_STYLES = ("bold bright_cyan", "bold cyan", "bold cyan", "cyan", "blue")
+
 
 def _style(text, *codes):
     """Wrap text in ANSI codes when color is on, else return it unchanged."""
@@ -58,15 +69,25 @@ def _version():
 
 def banner():
     from rich.panel import Panel
+    from rich.text import Text
     from panda import ui
 
     version = _version()
-    logo = "[title]🐼  P.A.N.D.A[/title]" + (f"  [muted]{version}[/muted]" if version else "")
-    body = logo + "\n[cyan]Secure vault · threat-detection platform[/cyan]"
     ui.console.print()
-    ui.console.print(Panel.fit(body, border_style="cyan", padding=(0, 2)))
+    if _FANCY:
+        for line, style in zip(_LOGO_LINES, _LOGO_STYLES):
+            ui.console.print(Text(line, style=style))
+        tagline = "  [cyan]P.A.N.D.A · secure vault + threat-detection platform[/cyan]"
+        if version:
+            tagline += "  [muted]{}[/muted]".format(version)
+        ui.console.print(tagline)
+    else:
+        logo = "[title]P.A.N.D.A[/title]" + (f"  [muted]{version}[/muted]" if version else "")
+        ui.console.print(Panel.fit(
+            logo + "\n[cyan]Secure vault + threat-detection platform[/cyan]",
+            border_style="cyan", padding=(0, 2)))
     ui.console.print(
-        "[muted]Type[/muted] [bold]HELP[/bold] [muted]for commands ·[/muted] "
+        "  [muted]Type[/muted] [bold]HELP[/bold] [muted]for commands ·[/muted] "
         "[bold]QUIT[/bold] [muted]to exit[/muted]")
     ui.console.print()
 

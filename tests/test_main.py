@@ -77,7 +77,8 @@ def test_set_first_time_shows_recovery_key(clean_password, monkeypatch, capsys):
     monkeypatch.setattr(main.db, "lock", lambda p: None)
     main.handle_set("set")
     out = capsys.readouterr().out
-    assert "RECOVERYKEY123" in out and "recovery key" in out.lower()
+    # shown grouped in 4s for readability: "RECO VERY KEY1 23"
+    assert "RECO VERY KEY1 23" in out and "recovery key" in out.lower()
 
 
 def test_set_refuses_when_password_exists(clean_password, monkeypatch, capsys):

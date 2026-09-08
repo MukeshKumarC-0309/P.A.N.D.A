@@ -53,10 +53,8 @@ def _in_unlocked_vault(action):
 
 
 def _open_vault_session():
-    """The VAULT command's action: print the banner, then run the record shell."""
-    print("-" * 60)
-    print('PANDA VAULT')
-    print('-' * 60)
+    """The VAULT command's action: show the vault header, then run the shell."""
+    ui.console.rule("[title]PANDA VAULT[/title]")
     DATABASE()
 
 
@@ -64,12 +62,13 @@ def _show_recovery_key(recovery_key, upgraded=False):
     """Show the recovery key once, prominently, with a keep-it-safe warning."""
     from rich.panel import Panel
     key = recovery_key.decode() if isinstance(recovery_key, bytes) else recovery_key
+    grouped = " ".join(key[i:i + 4] for i in range(0, len(key), 4))  # easier to transcribe
     lead = "Recovery is now enabled." if upgraded else "Your vault is ready."
     ui.console.print(Panel(
         "[bold]{}[/bold]  Save this recovery key somewhere safe and OFFLINE.\n"
         "It is the ONLY way back in if you forget your password, it cannot be\n"
         "shown again, and anyone who has it can open your vault:\n\n"
-        "    [title]{}[/title]".format(lead, key),
+        "    [title]{}[/title]".format(lead, grouped),
         title="[title]🔑  Recovery key — shown once[/title]",
         border_style="yellow", expand=False))
 
