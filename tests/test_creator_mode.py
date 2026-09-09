@@ -9,13 +9,26 @@ was removed; there is no raw-SQL path left to test.)
 """
 import builtins
 
-from panda import vault
+from panda import vault, cases
 
 
 def _run(steps, monkeypatch):
     it = iter(steps)
     monkeypatch.setattr(builtins, "input", lambda *a, **k: next(it))
     vault.DATABASE()
+
+
+def test_creator_mode_refuses_the_builtin_evidence_tables(db, monkeypatch, capsys):
+    # CREATOR mode must not be able to forge/alter the TDR evidence tables.
+    cases.record_case(title="real case", severity="high")
+    before = len(cases.list_cases())
+    _run(["CREATOR",
+          "ADD", "cases",              # try to insert a forged row into cases
+          "CREATE", "reports",         # try to create/alter a reserved table
+          "QUIT", "QUIT"], monkeypatch)
+    out = capsys.readouterr().out.lower()
+    assert out.count("reserved") >= 2          # both attempts refused
+    assert len(cases.list_cases()) == before   # no forged rows landed
 
 
 def test_creator_value_is_bound_not_injected(db, monkeypatch):

@@ -23,6 +23,11 @@ from panda.db import safe_identifier, insert
 from panda.browse import browse_cases
 from panda import ui
 
+# Built-in TDR evidence tables. CREATOR mode must never create/alter/insert into
+# them, so a user's own tables can't forge or corrupt the case store. (Reading
+# them is fine — that's what the CASES browser is for.)
+_RESERVED_TABLES = {"cases", "detections", "reports"}
+
 
 class VaultShell:
     """The interactive vault menu: browse TDR cases, and create/search your own
@@ -76,7 +81,7 @@ class VaultShell:
         print("-" * 100)
 
     def create_table(self):
-        table = self._prompt_identifier("Enter table name : ", "table name")
+        table = self._prompt_writable_table("Enter table name : ")
         if table is None:
             return
         # Identifiers can't be bound as parameters, so they're whitelist-validated
@@ -103,7 +108,7 @@ class VaultShell:
         print()
 
     def add_records(self):
-        table = self._prompt_identifier("Enter your table name : ", "table name")
+        table = self._prompt_writable_table("Enter your table name : ")
         if table is None:
             return
         try:
@@ -169,6 +174,18 @@ class VaultShell:
             self._bad_identifier(what)
             print()
             return None
+
+    def _prompt_writable_table(self, prompt):
+        """Like _prompt_identifier, but also refuses the built-in evidence
+        tables — so CREATOR mode can only create/modify the user's own tables."""
+        table = self._prompt_identifier(prompt, "table name")
+        if table is None:
+            return None
+        if table.lower() in _RESERVED_TABLES or table.lower().startswith("sqlite_"):
+            print("P.A.N.D.A : '{}' is a reserved table and cannot be modified here.".format(table))
+            print()
+            return None
+        return table
 
     def creator_mode(self):
         """Create tables, add rows, or view a user table."""

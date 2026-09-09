@@ -71,7 +71,17 @@ add an LLM report polish and a live Splunk pull. The engine's own build history
    (`safe_identifier` for the DDL identifiers, `db.insert` for the bound
    values). So there is no raw-SQL-on-user-input path left in the vault
    shell. Covered by `tests/test_creator_mode.py` (payload stored inert;
-   malicious table name rejected).
+   malicious table name rejected). CREATOR mode also **cannot touch the
+   built-in evidence tables** (`cases` / `detections` / `reports` /
+   `sqlite_*`): a reserved-name guard blocks create/alter/insert against
+   them, so a user's own tables can never forge or corrupt the case store.
+   (The generic DAO stays unrestricted — the bridge legitimately writes
+   evidence through it; the guard is at the CREATOR-mode boundary.)
+   - **Passwords are read without echo** (`auth.read_password`): getpass at
+     a real terminal so the master secret never hits the screen or
+     scrollback, with an `input()` fallback when stdin isn't a TTY (pipes /
+     tests). A corrupt password-hash file is treated as a failed check, not
+     a traceback.
 4. **Offline core, no secrets.** The core is fully offline, embedded
    SQLite: no server, no credentials, no API keys. `config.py` reads only
    the (optional) vault path — no import-time key check, so any component

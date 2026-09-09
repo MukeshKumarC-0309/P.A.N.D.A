@@ -9,7 +9,7 @@ panda/router.py: each command registers keywords and a handler(query);
 new capabilities (e.g. TDR commands) register without editing this loop.
 """
 from panda.system import help, banner, takecommand
-from panda.auth import password, check_password, PASSWORD_PATH
+from panda.auth import password, check_password, read_password, PASSWORD_PATH
 from panda.vault import DATABASE
 from panda.browse import browse_cases
 from panda import router, db, bridge, ui, crypto
@@ -37,7 +37,7 @@ def _in_unlocked_vault(action):
     """
     n = 0
     while n < 3:
-        p = input("P.A.N.D.A : Enter your password - ")
+        p = read_password("P.A.N.D.A : Enter your password - ")
         if check_password(p):
             db.unlock(p)
             try:
@@ -102,7 +102,7 @@ def handle_set(query):
 
 def handle_change(query):
     try:
-        p = input("P.A.N.D.A : Enter current password - ")
+        p = read_password("P.A.N.D.A : Enter current password - ")
         if check_password(p):
             print('P.A.N.D.A : You can change your password now. ')
             db.unlock(p)                     # load the vault with the current key

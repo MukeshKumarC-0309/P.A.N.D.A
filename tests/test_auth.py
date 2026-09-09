@@ -39,3 +39,33 @@ def test_path_is_under_vault_dir():
     from config import DB_PATH
     assert auth.PASSWORD_PATH.parent == DB_PATH.parent
     assert auth.PASSWORD_PATH.name == "password.hash"
+
+
+class _FakeStdin:
+    def __init__(self, tty):
+        self._tty = tty
+
+    def isatty(self):
+        return self._tty
+
+
+def test_read_password_masks_at_a_terminal(monkeypatch):
+    monkeypatch.setattr(auth.sys, "stdin", _FakeStdin(True))
+    monkeypatch.setattr(auth.getpass, "getpass", lambda prompt="": "secret")
+    monkeypatch.setattr("builtins.input",
+                        lambda *a, **k: pytest.fail("input() must not echo the password at a TTY"))
+    assert auth.read_password("pw: ") == "secret"
+
+
+def test_read_password_falls_back_without_a_tty(monkeypatch):
+    monkeypatch.setattr(auth.sys, "stdin", _FakeStdin(False))
+    monkeypatch.setattr(auth.getpass, "getpass",
+                        lambda prompt="": pytest.fail("getpass must not be used off a TTY"))
+    monkeypatch.setattr("builtins.input", lambda *a, **k: "typed")
+    assert auth.read_password("pw: ") == "typed"
+
+
+def test_check_password_corrupt_hash_returns_false(clean_password):
+    auth.PASSWORD_PATH.parent.mkdir(parents=True, exist_ok=True)
+    auth.PASSWORD_PATH.write_text("not-a-valid-bcrypt-hash")
+    assert auth.check_password("anything") is False    # deny, not a traceback
